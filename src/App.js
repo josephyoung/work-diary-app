@@ -8,6 +8,7 @@ import React from 'react';
 import {
   Button,
   ButtonGroup,
+  Container,
   Form,
   FormControl,
   Navbar,
@@ -15,7 +16,9 @@ import {
   Card,
   Modal,
   Row,
-  Col
+  Col,
+  CardGroup,
+  CardColumns
 } from 'react-bootstrap';
 import './bootstrap.min.css';
 import 'holderjs';
@@ -24,7 +27,7 @@ class NewDiary extends React.Component {
   render() {
     const { onClick } = this.props;
     return (
-      <Button className="ml-2" variant="success" onClick={onClick}>
+      <Button variant="success" onClick={onClick}>
         新建日志
       </Button>
     );
@@ -41,7 +44,7 @@ function EditDairy(props) {
     onDateChange,
     onTextChange,
     onDiarySubmit,
-    index,
+    index
   } = props;
 
   return (
@@ -80,19 +83,19 @@ function EditDairy(props) {
 class SearchBar extends React.Component {
   render() {
     return (
-      <Form inline>
-        <FormControl
-          type="text"
-          placeholder="搜索日志"
-          className="mr-sm-2"
-          style={{ maxWidth: '50%' }}
-        />
-        <InputGroup.Append>
-          <Button className="m-0" variant="outline-light">
-            搜索
-          </Button>
-        </InputGroup.Append>
-        {this.props.children}
+      <Form inline style={{maxWidth: '60%'}}>
+        <InputGroup>
+          <FormControl
+            type="text"
+            placeholder="搜索日志"
+
+          />
+          <InputGroup.Append>
+            <Button variant="outline-light">
+              搜索
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
       </Form>
     );
   }
@@ -100,12 +103,11 @@ class SearchBar extends React.Component {
 
 class NavigateBar extends React.Component {
   render() {
-    const { sticky } = this.props;
     return (
       <Navbar
-        sticky={sticky}
-        expand="lg"
-        className="bg-primary justify-content-around"
+        fixed="top"
+        expand="sm"
+        className="bg-primary justify-content-sm-between"
       >
         {this.props.children}
       </Navbar>
@@ -132,8 +134,8 @@ class BottomBar extends React.Component {
 
 class UserLoginForm extends React.Component {
   render() {
-    const { 
-      onHide, 
+    const {
+      onHide,
       onLoginSubmit,
       userLoginFormDisplay,
       userName,
@@ -143,7 +145,7 @@ class UserLoginForm extends React.Component {
     } = this.props;
 
     return (
-      <div style={{display: userLoginFormDisplay}}>
+      <div style={{ display: userLoginFormDisplay }}>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
         </Modal.Header>
@@ -154,14 +156,16 @@ class UserLoginForm extends React.Component {
             </Form.Label>
             <Col sm={8}>
               <Form.Control
-                type="text" 
-                placeholder="请输入用户名" 
-                required 
+                type="text"
+                placeholder="请输入用户名"
+                required
                 value={userName}
-                onChange={(e) => onUserNameChange(e.target.value)}
+                onChange={e => onUserNameChange(e.target.value)}
               />
             </Col>
-            <Form.Control.Feedback type='invalid'>请输入用户名</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              请输入用户名
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Row} controlId="form-control-plaintext">
@@ -169,22 +173,28 @@ class UserLoginForm extends React.Component {
               密码
             </Form.Label>
             <Col sm={8}>
-              <Form.Control 
-                type="password" 
-                placeholder="请输入密码" 
-                required 
+              <Form.Control
+                type="password"
+                placeholder="请输入密码"
+                required
                 value={passWord}
-                onChange={(e) => onPassWordChange(e.target.value)}
+                onChange={e => onPassWordChange(e.target.value)}
               />
-              <Form.Control.Feedback type='invalid'>请输入密码</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                请输入密码
+              </Form.Control.Feedback>
             </Col>
           </Form.Group>
 
-          <Form.Group controlId='formBasicLink' className='text-center'>
-            <Button variant="link" size='sm'>注册</Button> 
-            <Button variant="link" size='sm'>忘记密码</Button>           
+          <Form.Group controlId="formBasicLink" className="text-center">
+            <Button variant="link" size="sm">
+              注册
+            </Button>
+            <Button variant="link" size="sm">
+              忘记密码
+            </Button>
           </Form.Group>
-        </Form>            
+        </Form>
         <Modal.Footer>
           <Button variant="danger" onClick={onHide}>
             取消
@@ -200,28 +210,28 @@ class UserLoginForm extends React.Component {
 
 class LoginWindow extends React.Component {
   render() {
-    const { 
-      loginShow, 
-      onHide, 
-      onLoginSubmit, 
-      userName, 
-      passWord, 
-      onUserNameChange, 
+    const {
+      loginShow,
+      onHide,
+      onLoginSubmit,
+      userName,
+      passWord,
+      onUserNameChange,
       onPassWordChange,
       authentication,
       onLogout
     } = this.props;
 
     let userLoginFormDisplay, userInfoFormDisplay;
-    
-    if(!authentication) {
+
+    if (!authentication) {
       userLoginFormDisplay = 'block';
       userInfoFormDisplay = 'none';
     } else {
       userLoginFormDisplay = 'none';
       userInfoFormDisplay = 'block';
     }
-    
+
     return (
       <Modal
         show={loginShow}
@@ -231,18 +241,18 @@ class LoginWindow extends React.Component {
         backdrop="static"
         centered="true"
       >
-        <UserLoginForm 
-          onHide={onHide} 
-          onLoginSubmit={onLoginSubmit} 
-          userLoginFormDisplay={userLoginFormDisplay} 
+        <UserLoginForm
+          onHide={onHide}
+          onLoginSubmit={onLoginSubmit}
+          userLoginFormDisplay={userLoginFormDisplay}
           userName={userName}
           passWord={passWord}
           onUserNameChange={onUserNameChange}
           onPassWordChange={onPassWordChange}
         />
-        <UserInfoForm 
-          onHide={onHide} 
-          userInfoFormDisplay={userInfoFormDisplay} 
+        <UserInfoForm
+          onHide={onHide}
+          userInfoFormDisplay={userInfoFormDisplay}
           userName={userName}
           onLogout={onLogout}
         />
@@ -254,30 +264,35 @@ class LoginWindow extends React.Component {
 class UserInfoForm extends React.Component {
   render() {
     const { onLogout, onHide, userInfoFormDisplay, userName } = this.props;
-    return(
-      <div style={{display: userInfoFormDisplay}}>
+    return (
+      <div style={{ display: userInfoFormDisplay }}>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
             {userName}
-            , 您已登录成功。
+, 您已登录成功。
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='danger' onClick={onLogout}>登出</Button>
-          <Button variant='success' onClick={onHide}>关闭</Button>
+          <Button variant="danger" onClick={onLogout}>
+            登出
+          </Button>
+          <Button variant="success" onClick={onHide}>
+            关闭
+          </Button>
         </Modal.Footer>
       </div>
-    )
+    );
   }
 }
 
 class DiaryCard extends React.Component {
   render() {
-    const { editable, diary, onDiaryModifying, onDiaryDelete} = this.props;
+    const { editable, diary, onDiaryModifying, onDiaryDelete } = this.props;
     const { name, date, text } = diary;
+    const textHtml = text.replace(/\n/g, '</br>');
     return (
       <Card>
         <Card.Header as="h5">
@@ -285,12 +300,29 @@ class DiaryCard extends React.Component {
 (
           {name}
 )
+          <span className="float-right" style={{display: editable}}>
+            <Button
+              variant="danger"
+              size="sm"
+              className="mr-2"
+              onClick={onDiaryDelete}
+            >
+              删除
+            </Button>
+            <Button
+              variant="success"
+              size="sm"
+              className="rounded"
+              onClick={onDiaryModifying}
+            >
+              修改
+            </Button>
+          </span>
         </Card.Header>
-        <Card.Body>{text}</Card.Body>
-        <Card.Footer style={{ display: editable, textAlign: 'right'}} className='text-sm-right'>
-          <Button variant="danger" size='sm' className='mr-2' onClick={onDiaryDelete}>删除</Button>
-          <Button variant="success" size='sm' className='rounded' onClick={onDiaryModifying}>修改</Button>
-        </Card.Footer>
+        <Card.Body
+          dangerouslySetInnerHTML={{ __html: textHtml }}
+        >
+        </Card.Body>
       </Card>
     );
   }
@@ -404,7 +436,7 @@ const diaryList = [
   },
   {
     index: 11,
-    name: '张三',
+    name: '杨智峰',
     date: '2019-02-9',
     text:
       '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
@@ -461,24 +493,36 @@ const diaryList = [
 ];
 
 class DiaryCardList extends React.Component {
-  render () {
+  render() {
     const { diaryList, onDiaryModifying, onDiaryDelete } = this.props;
     const dateToday = new Date().toJSON().slice(0, 10);
     let d2 = Date.parse(dateToday);
     let diaryCardList = diaryList.map((diary, index) => {
       let d1 = Date.parse(diary.date);
-      if(d1 >= d2 || index === 0) {
-        return <DiaryCard key={diary.index} editable='show' diary={diary} onDiaryModifying={() => onDiaryModifying(index)} onDiaryDelete={() => onDiaryDelete(index)} />
+      if (d1 >= d2 || index === 0) {
+        return (
+          <DiaryCard
+            key={diary.index}
+            editable="show"
+            diary={diary}
+            onDiaryModifying={() => onDiaryModifying(index)}
+            onDiaryDelete={() => onDiaryDelete(index)}
+          />
+        );
       } else {
-        return <DiaryCard key={diary.index} editable='none' diary={diary} onDiaryModifying={() => onDiaryModifying(index)} onDiaryDelete={() => onDiaryDelete(index)} />
+        return (
+          <DiaryCard
+            key={diary.index}
+            editable="none"
+            diary={diary}
+            onDiaryModifying={() => onDiaryModifying(index)}
+            onDiaryDelete={() => onDiaryDelete(index)}
+          />
+        );
       }
     });
 
-    return (
-      <>
-        {diaryCardList}
-      </>
-    );
+    return <CardColumns style={{columnCount: '1'}}>{diaryCardList}</CardColumns>;
   }
 }
 
@@ -495,7 +539,7 @@ class DiaryPlatform extends React.Component {
       passWord: '',
       authentication: false,
       diaryList: diaryList.slice(),
-      modifiedShow: false,
+      modifiedShow: false
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -532,7 +576,7 @@ class DiaryPlatform extends React.Component {
   }
 
   handleNewDiaryClick() {
-    if(this.state.diaryDate === '') {
+    if (this.state.diaryDate === '') {
       this.setState({
         modalShow: true,
         diaryDate: new Date().toJSON().slice(0, 10)
@@ -551,7 +595,7 @@ class DiaryPlatform extends React.Component {
   }
 
   handleHomeClick() {
-    if(this.state.authentication) {
+    if (this.state.authentication) {
       this.setState({
         loginShow: false
       });
@@ -579,14 +623,14 @@ class DiaryPlatform extends React.Component {
   handleLoginSubmit() {
     this.setState({
       authentication: true
-    })
+    });
   }
 
   isScrollAtBottom() {
     let scrollTop = document.documentElement.scollTop;
     let windowHeight = document.body.clientHeight;
     let scrollHeight = document.documentElement.scrollHeight;
-    if(scrollTop === windowHeight + scrollHeight) {
+    if (scrollTop === windowHeight + scrollHeight) {
       return true;
     } else {
       return false;
@@ -598,11 +642,11 @@ class DiaryPlatform extends React.Component {
     this.setState(prevState => {
       let date = prevState.diaryList[index].date;
       let text = prevState.diaryList[index].text;
-      return ({
+      return {
         modifiedShow: true,
         diaryDate: date,
-        diaryText: text,
-      });
+        diaryText: text
+      };
     });
   }
 
@@ -610,22 +654,22 @@ class DiaryPlatform extends React.Component {
     this.setState(prevState => {
       let list = prevState.diaryList;
       list.splice(index, 1);
-      return ({diaryList: list});
+      return { diaryList: list };
     });
   }
 
   handleDiarySubmit(index) {
-    if(typeof(index) !== 'undefined') {
+    if (typeof index !== 'undefined') {
       this.setState(prevState => {
         let list = prevState.diaryList;
         list[index].text = prevState.diaryText;
-        return ({
+        return {
           diaryList: list,
           diaryDate: '',
           diaryText: '',
-          modifiedShow: false,
-        });
-      })
+          modifiedShow: false
+        };
+      });
     } else {
       this.setState(prevState => {
         let list = prevState.diaryList;
@@ -633,26 +677,28 @@ class DiaryPlatform extends React.Component {
           index: list.length,
           name: prevState.userName,
           date: prevState.diaryDate,
-          text: prevState.diaryText,
-        }
+          text: prevState.diaryText
+        };
         list.unshift(diary);
-        return ({
+        return {
           diaryList: list,
           diaryDate: '',
           diaryText: '',
-          modalShow: false,
-        });
+          modalShow: false
+        };
       });
     }
   }
-
+  //       <div style={{ margin: 'auto', maxWidth: '40rem' }}>
   render() {
     return (
-      <div style={{ margin: 'auto', maxWidth: '40rem' }}>
-        <NavigateBar sticky="top">
-          <SearchBar>
-            <NewDiary onClick={this.handleNewDiaryClick} />
-          </SearchBar>
+      <Container>
+        <Navbar sticky="top">
+          <NewDiary />
+        </Navbar>
+        <NavigateBar>
+          <SearchBar />
+          <NewDiary onClick={this.handleNewDiaryClick} />
         </NavigateBar>
         <EditDairy
           show={this.state.modalShow}
@@ -665,20 +711,25 @@ class DiaryPlatform extends React.Component {
         />
         <EditDairy
           show={this.state.modifiedShow}
-          onHide={() => this.setState({
-            modifiedShow: false,
-            diaryDate: '',
-            diaryText: ''
+          onHide={() =>
+            this.setState({
+              modifiedShow: false,
+              diaryDate: '',
+              diaryText: ''
             })
           }
           diary_date={this.state.diaryDate}
           diary_text={this.state.diaryText}
           onDateChange={this.onDateChange}
           onTextChange={this.onTextChange}
-          onDiarySubmit={this.handleDiarySubmit}          
+          onDiarySubmit={this.handleDiarySubmit}
           index={this.modifiedIndex}
         />
-        <DiaryCardList diaryList={this.state.diaryList} onDiaryModifying={this.handleDirayModifying} onDiaryDelete={this.handleDiaryDelete} />
+        <DiaryCardList
+          diaryList={this.state.diaryList}
+          onDiaryModifying={this.handleDirayModifying}
+          onDiaryDelete={this.handleDiaryDelete}
+        />
 
         <LoginWindow
           loginShow={this.state.loginShow}
@@ -689,18 +740,18 @@ class DiaryPlatform extends React.Component {
           userName={this.state.userName}
           passWord={this.state.passWord}
           authentication={this.state.authentication}
-          onLogout={() => {this.setState({
-                            authentication: false,
-                            userName: '',
-                            passWord: ''
-                          });
-                          }
-                  }
+          onLogout={() => {
+            this.setState({
+              authentication: false,
+              userName: '',
+              passWord: ''
+            });
+          }}
         />
-        <BottomBar sticky="bottom" style={{ margin:'auto', maxWidth: '40em' }}>
+        <BottomBar sticky="bottom" style={{ margin: 'auto' }}>
           <HomePage />
         </BottomBar>
-        <BottomBar fixed="bottom" style={{ margin: 'auto', maxWidth: '40rem' }}>
+        <BottomBar fixed="bottom" style={{ margin: 'auto' }}>
           <HomePage
             loginShow={this.state.loginShow}
             onClick={this.handleHomeClick}
@@ -710,7 +761,7 @@ class DiaryPlatform extends React.Component {
             onClick={this.handleUserClick}
           />
         </BottomBar>
-      </div>
+      </Container>
     );
   }
 }
