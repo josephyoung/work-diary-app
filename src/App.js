@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -7,7 +8,6 @@
 import React from 'react';
 import {
   Button,
-  ButtonGroup,
   Container,
   Form,
   FormControl,
@@ -17,11 +17,10 @@ import {
   Modal,
   Row,
   Col,
-  CardGroup,
-  CardColumns
+  CardColumns,
 } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './bootstrap.min.css';
-import 'holderjs';
 
 class NewDiary extends React.Component {
   render() {
@@ -141,7 +140,7 @@ class UserLoginForm extends React.Component {
       userName,
       passWord,
       onUserNameChange,
-      onPassWordChange
+      onPassWordChange,
     } = this.props;
 
     return (
@@ -187,12 +186,9 @@ class UserLoginForm extends React.Component {
           </Form.Group>
 
           <Form.Group controlId="formBasicLink" className="text-center">
-            <Button variant="link" size="sm">
-              注册
-            </Button>
-            <Button variant="link" size="sm">
-              忘记密码
-            </Button>
+            <Link to="/signup">注册</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Link to="/restore_password">忘记密码</Link>
           </Form.Group>
         </Form>
         <Modal.Footer>
@@ -292,7 +288,18 @@ class DiaryCard extends React.Component {
   render() {
     const { editable, diary, onDiaryModifying, onDiaryDelete } = this.props;
     const { name, date, text } = diary;
-    const textHtml = text.replace(/\n/g, '</br>');
+    const textList = text.split('\n');
+    const textListhtml = (
+      <Card.Body>
+        {textList.map((text,index) => (
+          <article key={index}>
+            {text}
+            <br />
+          </article>
+        ))}
+      </Card.Body>
+    );
+    
     return (
       <Card>
         <Card.Header as="h5">
@@ -319,10 +326,7 @@ class DiaryCard extends React.Component {
             </Button>
           </span>
         </Card.Header>
-        <Card.Body
-          dangerouslySetInnerHTML={{ __html: textHtml }}
-        >
-        </Card.Body>
+        {textListhtml}
       </Card>
     );
   }
@@ -383,28 +387,28 @@ const diaryList = [
     name: '张三',
     date: '2019-02-17',
     text:
-      '1. Lorem ipsum doloam, doloremque. 2. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga laboriosres ad. 3. Lorem ipsum dolor sit alor beatae quisquam alia.'
+      '1. Lorem ipsum doloam, doloremque. \n2. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga laboriosres ad. \n3. Lorem ipsum dolor sit alor beatae quisquam alia.'
   },
   {
     index: 4,
     name: '张三',
     date: '2019-02-21',
     text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
+      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi \n2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? \n3. Accusantium nulla corporis, commodi aliquam ullam laborum eius \n4. Deleagni modi cum! Soluta, doloribus!'
   },
   {
     index: 5,
     name: '张三',
     date: '2019-02-22',
     text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
+      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi \n2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? \n3. Accusantium nulla corporis, commodi aliquam ullam laborum eius \n4. Deleagni modi cum! Soluta, doloribus!'
   },
   {
     index: 6,
     name: '张三',
     date: '2019-02-14',
     text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
+      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi \n2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? \n3. Accusantium nulla corporis, commodi aliquam ullam laborum eius \n4. Deleagni modi cum! Soluta, doloribus!'
   },
   {
     index: 7,
@@ -689,7 +693,7 @@ class DiaryPlatform extends React.Component {
       });
     }
   }
-  //       <div style={{ margin: 'auto', maxWidth: '40rem' }}>
+
   render() {
     return (
       <Container>
