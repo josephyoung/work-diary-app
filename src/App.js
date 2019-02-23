@@ -43,12 +43,12 @@ function EditDairy(props) {
     onDateChange,
     onTextChange,
     onDiarySubmit,
-    index
+    index,
   } = props;
 
   return (
     <Modal show={show} onHide={onHide} backdrop="static">
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id="contained-modal-titl-vcenter">
           <FormControl
             type="date"
@@ -555,10 +555,26 @@ class DiaryPlatform extends React.Component {
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
     this.handlePassWordChange = this.handlePassWordChange.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.isScrollAtBottom = this.isScrollAtBottom.bind(this);
     this.handleDirayModifying = this.handleDirayModifying.bind(this);
     this.handleDiaryDelete = this.handleDiaryDelete.bind(this);
     this.handleDiarySubmit = this.handleDiarySubmit.bind(this);
+  }
+
+  componentDidMount() {
+    let myStorage = window.localStorage;
+    const userName = myStorage.getItem('userName');
+    const passWord = myStorage.getItem('passWord');
+    if(userName !== null && passWord !== null) {
+      this.setState({
+        userName: userName,
+        passWord: passWord,
+        authorization: true,
+      });
+    } else {
+      this.setState({authorization: false});
+    }   
   }
 
   onDateChange(date) {
@@ -592,7 +608,7 @@ class DiaryPlatform extends React.Component {
         });
       }
     } else {
-      alert('请先登录!');
+      this.setState({modalShow: true});
     }
   }
   
@@ -629,8 +645,23 @@ class DiaryPlatform extends React.Component {
   }
 
   handleLoginSubmit() {
+    const userName = this.state.userName;
+    const passWord = this.state.passWord;
+    if(userName !== '' && passWord !== '') {
+      localStorage.setItem('userName', userName);
+      localStorage.setItem('passWord', passWord);
+      this.setState({authorization: true});
+    } else {
+      this.setState({authorization: false});
+    }
+  }
+
+  handleLogout() {
+    localStorage.clear();
     this.setState({
-      authorization: true
+      authorization: false,
+      userName: '',
+      passWord: ''
     });
   }
 
@@ -748,13 +779,7 @@ class DiaryPlatform extends React.Component {
           userName={this.state.userName}
           passWord={this.state.passWord}
           authorization={this.state.authorization}
-          onLogout={() => {
-            this.setState({
-              authorization: false,
-              userName: '',
-              passWord: ''
-            });
-          }}
+          onLogout={this.handleLogout}
         />
         <BottomBar sticky="bottom" style={{ margin: 'auto' }}>
           <HomePage />
