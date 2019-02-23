@@ -1,10 +1,19 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Navbar, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './bootstrap.min.css';
+import './font-awesome.css';
 
 const SignUp = (props) => {
   return (
     <div>
+      <Navbar
+        className='bg-primary justify-content-between'
+      >
+        <Link className='btn btn-outline-light' to='/'>
+          返回
+        </Link>
+      </Navbar>
       <Card>
         <Card.Header>账号注册</Card.Header>
         <Card.Body>

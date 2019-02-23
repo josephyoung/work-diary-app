@@ -91,7 +91,7 @@ class SearchBar extends React.Component {
           />
           <InputGroup.Append>
             <Button variant="outline-light">
-              搜索
+              <i className="fa fa-search" />
             </Button>
           </InputGroup.Append>
         </InputGroup>
@@ -148,12 +148,15 @@ class UserLoginForm extends React.Component {
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
         </Modal.Header>
-        <Form style={{ width: '80%', margin: 'auto' }}>
+        <Form style={{ width: '60%', margin: 'auto' }}>
           <Form.Group as={Row} controlId="form-control-plaintext">
-            <Form.Label column sm={3}>
-              用户名
-            </Form.Label>
-            <Col sm={8}>
+            <Form.Label column sm={3} />
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <i className='fa fa-user fa-fw' />
+                </InputGroup.Text>
+              </InputGroup.Prepend>            
               <Form.Control
                 type="text"
                 placeholder="请输入用户名"
@@ -161,17 +164,17 @@ class UserLoginForm extends React.Component {
                 value={userName}
                 onChange={e => onUserNameChange(e.target.value)}
               />
-            </Col>
-            <Form.Control.Feedback type="invalid">
-              请输入用户名
-            </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
 
           <Form.Group as={Row} controlId="form-control-plaintext">
-            <Form.Label column sm={3}>
-              密码
-            </Form.Label>
-            <Col sm={8}>
+            <Form.Label column sm={3} />
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <i className='fa fa-key fa-fw' />
+                </InputGroup.Text>
+              </InputGroup.Prepend> 
               <Form.Control
                 type="password"
                 placeholder="请输入密码"
@@ -179,10 +182,7 @@ class UserLoginForm extends React.Component {
                 value={passWord}
                 onChange={e => onPassWordChange(e.target.value)}
               />
-              <Form.Control.Feedback type="invalid">
-                请输入密码
-              </Form.Control.Feedback>
-            </Col>
+            </InputGroup>
           </Form.Group>
 
           <Form.Group controlId="formBasicLink" className="text-center">
@@ -214,13 +214,13 @@ class LoginWindow extends React.Component {
       passWord,
       onUserNameChange,
       onPassWordChange,
-      authentication,
+      authorization,
       onLogout
     } = this.props;
 
     let userLoginFormDisplay, userInfoFormDisplay;
 
-    if (!authentication) {
+    if (!authorization) {
       userLoginFormDisplay = 'block';
       userInfoFormDisplay = 'none';
     } else {
@@ -352,7 +352,7 @@ class Person extends React.Component {
       <img
         src={img_src}
         alt="PROFILE"
-        title="Me"
+        title="我的"
         width="40"
         onClick={onClick}
       />
@@ -541,7 +541,7 @@ class DiaryPlatform extends React.Component {
       loginShow: false,
       userName: '',
       passWord: '',
-      authentication: false,
+      authorization: false,
       diaryList: diaryList.slice(),
       modifiedShow: false
     };
@@ -580,18 +580,22 @@ class DiaryPlatform extends React.Component {
   }
 
   handleNewDiaryClick() {
-    if (this.state.diaryDate === '') {
-      this.setState({
-        modalShow: true,
-        diaryDate: new Date().toJSON().slice(0, 10)
-      });
+    if(this.state.authorization) {
+      if (this.state.diaryDate === '') {
+        this.setState({
+          modalShow: true,
+          diaryDate: new Date().toJSON().slice(0, 10)
+        });
+      } else {
+        this.setState({
+          modalShow: true
+        });
+      }
     } else {
-      this.setState({
-        modalShow: true
-      });
+      alert('请先登录!');
     }
   }
-
+  
   handleUserClick() {
     this.setState({
       loginShow: true
@@ -599,7 +603,7 @@ class DiaryPlatform extends React.Component {
   }
 
   handleHomeClick() {
-    if (this.state.authentication) {
+    if (this.state.authorization) {
       this.setState({
         loginShow: false
       });
@@ -626,7 +630,7 @@ class DiaryPlatform extends React.Component {
 
   handleLoginSubmit() {
     this.setState({
-      authentication: true
+      authorization: true
     });
   }
 
@@ -703,7 +707,7 @@ class DiaryPlatform extends React.Component {
         <NavigateBar>
           <SearchBar />
           <NewDiary onClick={this.handleNewDiaryClick} />
-        </NavigateBar>
+        </NavigateBar>      
         <EditDairy
           show={this.state.modalShow}
           onHide={this.handleClose}
@@ -743,10 +747,10 @@ class DiaryPlatform extends React.Component {
           onPassWordChange={this.handlePassWordChange}
           userName={this.state.userName}
           passWord={this.state.passWord}
-          authentication={this.state.authentication}
+          authorization={this.state.authorization}
           onLogout={() => {
             this.setState({
-              authentication: false,
+              authorization: false,
               userName: '',
               passWord: ''
             });
