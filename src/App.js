@@ -267,8 +267,8 @@ class UserInfoForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
+            当前登录用户:&nbsp;
             {userName}
-, 您已登录成功。
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -573,7 +573,9 @@ class DiaryPlatform extends React.Component {
         authorization: true,
       });
     } else {
-      this.setState({authorization: false});
+      this.setState({
+        loginShow: true,
+        authorization: false});
     }   
   }
 
@@ -596,7 +598,9 @@ class DiaryPlatform extends React.Component {
   }
 
   handleNewDiaryClick() {
-    if(this.state.authorization) {
+    if(this.state.authorization &&
+      this.state.userName !== '' &&
+      this.state.passWord !== '') {
       if (this.state.diaryDate === '') {
         this.setState({
           modalShow: true,
@@ -608,7 +612,7 @@ class DiaryPlatform extends React.Component {
         });
       }
     } else {
-      this.setState({modalShow: true});
+      this.setState({loginShow: true, authorization: false});
     }
   }
   
@@ -677,24 +681,36 @@ class DiaryPlatform extends React.Component {
   }
 
   handleDirayModifying(index) {
-    this.modifiedIndex = index;
-    this.setState(prevState => {
-      let date = prevState.diaryList[index].date;
-      let text = prevState.diaryList[index].text;
-      return {
-        modifiedShow: true,
-        diaryDate: date,
-        diaryText: text
-      };
-    });
+    if(this.state.authorization &&
+      this.state.userName !== '' &&
+      this.state.passWord !== '') {
+        this.modifiedIndex = index;
+        this.setState(prevState => {
+          let date = prevState.diaryList[index].date;
+          let text = prevState.diaryList[index].text;
+          return {
+            modifiedShow: true,
+            diaryDate: date,
+            diaryText: text
+          };
+        });
+    } else {
+      this.setState({loginShow: true, authorization: false});
+    }
   }
 
   handleDiaryDelete(index) {
-    this.setState(prevState => {
-      let list = prevState.diaryList;
-      list.splice(index, 1);
-      return { diaryList: list };
-    });
+    if(this.state.authorization &&
+      this.state.userName !== '' &&
+      this.state.passWord !== '') {
+        this.setState(prevState => {
+          let list = prevState.diaryList;
+          list.splice(index, 1);
+          return { diaryList: list };
+        });
+    } else {
+      this.setState({loginShow: true, authorization: false});
+    }
   }
 
   handleDiarySubmit(index) {
