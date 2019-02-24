@@ -1,8 +1,6 @@
 import React from 'react';
 import { Navbar, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import './bootstrap.min.css';
-import './font-awesome.css';
 
 const SignUp = (props) => {
   return (

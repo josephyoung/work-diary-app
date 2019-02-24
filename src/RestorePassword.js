@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navbar, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import './bootstrap.min.css';
 
 const RestorePassword = (props) => {
   return (

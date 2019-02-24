@@ -21,6 +21,19 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './bootstrap.min.css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faSearch,
+  faUser,
+  faKey
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+library.add(
+  faSearch,
+  faUser,
+  faKey
+)
 
 class NewDiary extends React.Component {
   render() {
@@ -91,7 +104,9 @@ class SearchBar extends React.Component {
           />
           <InputGroup.Append>
             <Button variant="outline-light">
-              <i className="fa fa-search" />
+              <FontAwesomeIcon
+                icon={['fas', 'search']}
+              />
             </Button>
           </InputGroup.Append>
         </InputGroup>
@@ -154,7 +169,10 @@ class UserLoginForm extends React.Component {
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
-                  <i className='fa fa-user fa-fw' />
+                  <FontAwesomeIcon
+                    icon={['fas', 'user']}
+                    fixedWidth
+                  />
                 </InputGroup.Text>
               </InputGroup.Prepend>            
               <Form.Control
@@ -172,7 +190,10 @@ class UserLoginForm extends React.Component {
             <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>
-                  <i className='fa fa-key fa-fw' />
+                  <FontAwesomeIcon
+                    icon={['fas','key']}
+                    fixedWidth
+                  />
                 </InputGroup.Text>
               </InputGroup.Prepend> 
               <Form.Control
