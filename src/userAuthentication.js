@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-const userAuthentication = (userName, passWord) => {
-  return userName !== '' && passWord !== ''
+const userAuthentication = (username, password) => {
+  return username !== '' && password !== ''
     ? true
     : false;
 }
