@@ -28,7 +28,7 @@ import {
   faKey
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import userAuthorization from './userAuthorization';
+import userAuthentication from './userAuthentication';
 
 library.add(
   faSearch,
@@ -157,9 +157,9 @@ class UserLoginForm extends React.Component {
   }
 
    handleSubmit = () => {
-    const { onLoginSubmit, authorization } = this.props;
+    const { onLoginSubmit, authentication } = this.props;
     onLoginSubmit();
-    if(!authorization) {
+    if(!authentication) {
       this.setState({alertShow: true});
     }
   }
@@ -251,13 +251,13 @@ class LoginWindow extends React.Component {
       passWord,
       onUserNameChange,
       onPassWordChange,
-      authorization,
+      authentication,
       onLogout
     } = this.props;
 
     let userLoginFormDisplay, userInfoFormDisplay;
 
-    if (!authorization) {
+    if (!authentication) {
       userLoginFormDisplay = 'block';
       userInfoFormDisplay = 'none';
     } else {
@@ -578,7 +578,7 @@ class DiaryPlatform extends React.Component {
       loginShow: false,
       userName: '',
       passWord: '',
-      authorization: false,
+      authentication: false,
       diaryList: diaryList.slice(),
       modifiedShow: false
     };
@@ -607,12 +607,12 @@ class DiaryPlatform extends React.Component {
       this.setState({
         userName: userName,
         passWord: passWord,
-        authorization: true,
+        authentication: true,
       });
     } else {
       this.setState({
         loginShow: true,
-        authorization: false});
+        authentication: false});
     }   
   }
 
@@ -635,7 +635,7 @@ class DiaryPlatform extends React.Component {
   }
 
   handleNewDiaryClick() {
-    if(this.state.authorization &&
+    if(this.state.authentication &&
       this.state.userName !== '' &&
       this.state.passWord !== '') {
       if (this.state.diaryDate === '') {
@@ -649,7 +649,7 @@ class DiaryPlatform extends React.Component {
         });
       }
     } else {
-      this.setState({loginShow: true, authorization: false});
+      this.setState({loginShow: true, authentication: false});
     }
   }
   
@@ -660,7 +660,7 @@ class DiaryPlatform extends React.Component {
   }
 
   handleHomeClick() {
-    if (this.state.authorization) {
+    if (this.state.authentication) {
       this.setState({
         loginShow: false
       });
@@ -689,15 +689,15 @@ class DiaryPlatform extends React.Component {
     const userName = this.state.userName;
     const passWord = this.state.passWord;
     if(userName !== '' && passWord !== '') {
-      const authorizationState = userAuthorization(userName, passWord);
-      this.setState({authorization: authorizationState});
-      if(authorizationState) {
+      const authenticationState = userAuthentication(userName, passWord);
+      this.setState({authentication: authenticationState});
+      if(authenticationState) {
         localStorage.setItem('userName', userName);
         localStorage.setItem('passWord', passWord);
       }
     } else {
-      if(this.state.authorization) {
-        this.setState({authorization: false});
+      if(this.state.authentication) {
+        this.setState({authentication: false});
       }
     }
   }
@@ -705,7 +705,7 @@ class DiaryPlatform extends React.Component {
   handleLogout() {
     localStorage.clear();
     this.setState({
-      authorization: false,
+      authentication: false,
       userName: '',
       passWord: ''
     });
@@ -723,7 +723,7 @@ class DiaryPlatform extends React.Component {
   }
 
   handleDirayModifying(index) {
-    if(this.state.authorization &&
+    if(this.state.authentication &&
       this.state.userName !== '' &&
       this.state.passWord !== '') {
         this.modifiedIndex = index;
@@ -737,12 +737,12 @@ class DiaryPlatform extends React.Component {
           };
         });
     } else {
-      this.setState({loginShow: true, authorization: false});
+      this.setState({loginShow: true, authentication: false});
     }
   }
 
   handleDiaryDelete(index) {
-    if(this.state.authorization &&
+    if(this.state.authentication &&
       this.state.userName !== '' &&
       this.state.passWord !== '') {
         this.setState(prevState => {
@@ -751,7 +751,7 @@ class DiaryPlatform extends React.Component {
           return { diaryList: list };
         });
     } else {
-      this.setState({loginShow: true, authorization: false});
+      this.setState({loginShow: true, authentication: false});
     }
   }
 
@@ -836,7 +836,7 @@ class DiaryPlatform extends React.Component {
           onPassWordChange={this.handlePassWordChange}
           userName={this.state.userName}
           passWord={this.state.passWord}
-          authorization={this.state.authorization}
+          authentication={this.state.authentication}
           onLogout={this.handleLogout}
         />
         <BottomBar sticky="bottom" style={{ margin: 'auto' }}>

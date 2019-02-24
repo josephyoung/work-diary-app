@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-const userAuthorization = (userName, passWord) => {
+const userAuthentication = (userName, passWord) => {
   return userName !== '' && passWord !== ''
     ? true
     : false;
 }
 
-export default userAuthorization;
+export default userAuthentication;
