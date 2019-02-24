@@ -695,6 +695,10 @@ class DiaryPlatform extends React.Component {
         localStorage.setItem('userName', userName);
         localStorage.setItem('passWord', passWord);
       }
+    } else {
+      if(this.state.authorization) {
+        this.setState({authorization: false});
+      }
     }
   }
 
