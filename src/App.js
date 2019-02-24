@@ -7,6 +7,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import {
+  Alert,
   Button,
   Container,
   Form,
@@ -16,7 +17,6 @@ import {
   Card,
   Modal,
   Row,
-  Col,
   CardColumns,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -147,10 +147,25 @@ class BottomBar extends React.Component {
 }
 
 class UserLoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      alertShow: false,
+    }
+  }
+
+   handleSubmit = () => {
+    const { onLoginSubmit, authorization } = this.props;
+    onLoginSubmit();
+    if(!authorization) {
+      this.setState({alertShow: true});
+    }
+  }
+
   render() {
     const {
       onHide,
-      onLoginSubmit,
       userLoginFormDisplay,
       userName,
       passWord,
@@ -205,7 +220,7 @@ class UserLoginForm extends React.Component {
               />
             </InputGroup>
           </Form.Group>
-
+          <Alert variant='danger' show={this.state.alertShow}>用户名或密码错误！</Alert>
           <Form.Group controlId="formBasicLink" className="text-center">
             <Link to="/signup">注册</Link>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -216,7 +231,7 @@ class UserLoginForm extends React.Component {
           <Button variant="danger" onClick={onHide}>
             取消
           </Button>
-          <Button variant="success" type="submit" onClick={onLoginSubmit}>
+          <Button variant="success" type="submit" onClick={this.handleSubmit}>
             登录
           </Button>
         </Modal.Footer>
