@@ -28,6 +28,7 @@ import {
   faKey
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import userAuthorization from './userAuthorization';
 
 library.add(
   faSearch,
@@ -688,11 +689,12 @@ class DiaryPlatform extends React.Component {
     const userName = this.state.userName;
     const passWord = this.state.passWord;
     if(userName !== '' && passWord !== '') {
-      localStorage.setItem('userName', userName);
-      localStorage.setItem('passWord', passWord);
-      this.setState({authorization: true});
-    } else {
-      this.setState({authorization: false});
+      const authorizationState = userAuthorization(userName, passWord);
+      this.setState({authorization: authorizationState});
+      if(authorizationState) {
+        localStorage.setItem('userName', userName);
+        localStorage.setItem('passWord', passWord);
+      }
     }
   }
 
