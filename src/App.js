@@ -29,7 +29,6 @@ import {
   faKey
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios';
 import userAuthentication from './userAuthentication';
 import getDiaryList from './getDiaryList';
 
@@ -561,10 +560,7 @@ class DiaryPlatform extends React.Component {
     const userName = this.state.userName;
     const passWord = this.state.passWord;
     if(userName !== '' && passWord !== '') {
-      axios.post('/api/users/authenticate', {
-        username: userName,
-        password: passWord
-      })
+      userAuthentication(userName, passWord)
       .then(res => {
         this.setState({authentication: res.data.auth});
         if(res.data.auth) {

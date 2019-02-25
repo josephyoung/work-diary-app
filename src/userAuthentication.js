@@ -7,7 +7,7 @@ const userAuthentication = (username, password) => {
     return axios.post('/api/users/authenticate', {
       username: username,
       password: password
-    }).auth;
+    });
   } else {
     return false;
   }
