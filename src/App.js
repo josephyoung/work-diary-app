@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -28,13 +29,18 @@ import {
   faKey
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from 'axios';
 import userAuthentication from './userAuthentication';
+import getDiaryList from './getDiaryList';
+
 
 library.add(
   faSearch,
   faUser,
   faKey
 )
+
+
 
 class NewDiary extends React.Component {
   render() {
@@ -397,180 +403,42 @@ class Person extends React.Component {
   }
 }
 
-const diaryList = [
-  {
-    index: 0,
-    name: '张三',
-    date: '2019-02-18',
-    text:
-      '1. Lorem ipsum dolor . \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex labore perspiciatiso.'
-  },
-  {
-    index: 1,
-    name: '张三',
-    date: '2019-02-19',
-    text:
-      '1. Lorem ipsum dolor . \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex labore perspiciatiso.'
-  },
-  {
-    index: 2,
-    name: '张三',
-    date: '2019-02-18',
-    text:
-      '1. Lorem ipsum dolor . \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex labore perspiciatiso.'
-  },
-  {
-    index: 3,
-    name: '张三',
-    date: '2019-02-17',
-    text:
-      '1. Lorem ipsum doloam, doloremque. \n2. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga laboriosres ad. \n3. Lorem ipsum dolor sit alor beatae quisquam alia.'
-  },
-  {
-    index: 4,
-    name: '张三',
-    date: '2019-02-21',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi \n2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? \n3. Accusantium nulla corporis, commodi aliquam ullam laborum eius \n4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 5,
-    name: '张三',
-    date: '2019-02-22',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi \n2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? \n3. Accusantium nulla corporis, commodi aliquam ullam laborum eius \n4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 6,
-    name: '张三',
-    date: '2019-02-14',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi \n2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? \n3. Accusantium nulla corporis, commodi aliquam ullam laborum eius \n4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 7,
-    name: '张三',
-    date: '2019-02-13',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 8,
-    name: '张三',
-    date: '2019-02-12',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 9,
-    name: '张三',
-    date: '2019-02-11',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 10,
-    name: '张三',
-    date: '2019-02-10',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 11,
-    name: '杨智峰',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 12,
-    name: '张三',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 13,
-    name: '张三',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 14,
-    name: '张三',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 15,
-    name: '张三',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 16,
-    name: '张三',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 17,
-    name: '张三',
-    date: '2019-02-20',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  },
-  {
-    index: 18,
-    name: '张三',
-    date: '2019-02-9',
-    text:
-      '1. t consectetur adipisicing elit. A sequi perspiciatis quo fugi 2. Temporibus expedita tempore modi ex nemo. Ipsa prehenderit perferendis inventore eveniet, nihil? 3. Accusantium nulla corporis, commodi aliquam ullam laborum eius 4. Deleagni modi cum! Soluta, doloribus!'
-  }
-];
+function DiaryCardList(props) {
+  const { diaryList, onDiaryModifying, onDiaryDelete } = props;
+  const dateToday = new Date().toJSON().slice(0, 10);
+  let d2 = Date.parse(dateToday);
+  let diaryCardList = diaryList.map((diary, index) => {
+    let d1 = Date.parse(diary.date);
+    if (d1 >= d2 || index === 0) {
+      return (
+        <DiaryCard
+          key={diary.index}
+          editable="show"
+          diary={diary}
+          onDiaryModifying={() => onDiaryModifying(index)}
+          onDiaryDelete={() => onDiaryDelete(index)}
+        />
+      );
+    } else {
+      return (
+        <DiaryCard
+          key={diary.index}
+          editable="none"
+          diary={diary}
+          onDiaryModifying={() => onDiaryModifying(index)}
+          onDiaryDelete={() => onDiaryDelete(index)}
+        />
+      );
+    }
+  });
 
-class DiaryCardList extends React.Component {
-  render() {
-    const { diaryList, onDiaryModifying, onDiaryDelete } = this.props;
-    const dateToday = new Date().toJSON().slice(0, 10);
-    let d2 = Date.parse(dateToday);
-    let diaryCardList = diaryList.map((diary, index) => {
-      let d1 = Date.parse(diary.date);
-      if (d1 >= d2 || index === 0) {
-        return (
-          <DiaryCard
-            key={diary.index}
-            editable="show"
-            diary={diary}
-            onDiaryModifying={() => onDiaryModifying(index)}
-            onDiaryDelete={() => onDiaryDelete(index)}
-          />
-        );
-      } else {
-        return (
-          <DiaryCard
-            key={diary.index}
-            editable="none"
-            diary={diary}
-            onDiaryModifying={() => onDiaryModifying(index)}
-            onDiaryDelete={() => onDiaryDelete(index)}
-          />
-        );
-      }
-    });
-
-    return <CardColumns style={{columnCount: '1'}}>{diaryCardList}</CardColumns>;
-  }
+  return <CardColumns style={{columnCount: '1'}}>{diaryCardList}</CardColumns>;
 }
 
 class DiaryPlatform extends React.Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       modalShow: false,
       diaryDate: '',
@@ -579,7 +447,7 @@ class DiaryPlatform extends React.Component {
       userName: '',
       passWord: '',
       authentication: false,
-      diaryList: diaryList.slice(),
+      diaryList: [],
       modifiedShow: false
     };
 
@@ -609,11 +477,15 @@ class DiaryPlatform extends React.Component {
         passWord: passWord,
         authentication: true,
       });
+      getDiaryList()
+      .then(res => {
+        this.setState({diaryList: res.data});
+      });
     } else {
       this.setState({
         loginShow: true,
         authentication: false});
-    }   
+    }
   }
 
   onDateChange(date) {
@@ -689,25 +561,31 @@ class DiaryPlatform extends React.Component {
     const userName = this.state.userName;
     const passWord = this.state.passWord;
     if(userName !== '' && passWord !== '') {
-      const authenticationState = userAuthentication(userName, passWord);
-      this.setState({authentication: authenticationState});
-      if(authenticationState) {
-        localStorage.setItem('userName', userName);
-        localStorage.setItem('passWord', passWord);
-      }
-    } else {
-      if(this.state.authentication) {
-        this.setState({authentication: false});
-      }
+      axios.post('/api/users/authenticate', {
+        username: userName,
+        password: passWord
+      })
+      .then(res => {
+        this.setState({authentication: res.data.auth});
+        if(res.data.auth) {
+          getDiaryList()
+          .then(res => {
+            this.setState({diaryList: res.data});
+          });
+          localStorage.setItem('userName', userName);
+          localStorage.setItem('passWord', passWord);
+        }
+      });
     }
-  }
+  } 
 
   handleLogout() {
     localStorage.clear();
     this.setState({
       authentication: false,
       userName: '',
-      passWord: ''
+      passWord: '',
+      diaryList: [],
     });
   }
 
@@ -790,9 +668,7 @@ class DiaryPlatform extends React.Component {
   render() {
     return (
       <Container>
-        <Navbar sticky="top">
-          <NewDiary />
-        </Navbar>
+        <Navbar sticky="top" style={{height: '3.5em'}} />
         <NavigateBar>
           <SearchBar />
           <NewDiary onClick={this.handleNewDiaryClick} />
@@ -839,9 +715,7 @@ class DiaryPlatform extends React.Component {
           authentication={this.state.authentication}
           onLogout={this.handleLogout}
         />
-        <BottomBar sticky="bottom" style={{ margin: 'auto' }}>
-          <HomePage />
-        </BottomBar>
+        <Navbar sticky="bottom" style={{height: '3.5em'}} />
         <BottomBar fixed="bottom" style={{ margin: 'auto' }}>
           <HomePage
             loginShow={this.state.loginShow}
