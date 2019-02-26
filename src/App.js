@@ -471,14 +471,19 @@ class DiaryPlatform extends React.Component {
     const userName = myStorage.getItem('userName');
     const passWord = myStorage.getItem('passWord');
     if(userName !== null && passWord !== null) {
-      this.setState({
-        userName: userName,
-        passWord: passWord,
-        authentication: true,
-      });
-      getDiaryList()
+      userAuthentication(userName, passWord)
       .then(res => {
-        this.setState({diaryList: res.data});
+        if(res.data.auth) {
+          this.setState({
+            userName: userName,
+            passWord: passWord,
+            authentication: true,
+          });
+          getDiaryList()
+          .then(res => {
+            this.setState({diaryList: res.data});
+          });
+        }
       });
     } else {
       this.setState({
