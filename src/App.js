@@ -31,7 +31,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import userAuthentication from './userAuthentication';
 import getDiaryList from './getDiaryList';
-
+import diaryCreate from './diaryCreate';
+import diaryModify from './diaryModify';
+import diaryDelete from './diaryDelete';
 
 library.add(
   faSearch,
@@ -411,7 +413,7 @@ function DiaryCardList(props) {
     if (d1 >= d2 || index === 0) {
       return (
         <DiaryCard
-          key={diary.index}
+          key={diary._id}
           editable="show"
           diary={diary}
           onDiaryModifying={() => onDiaryModifying(index)}
@@ -421,7 +423,7 @@ function DiaryCardList(props) {
     } else {
       return (
         <DiaryCard
-          key={diary.index}
+          key={diary._id}
           editable="none"
           diary={diary}
           onDiaryModifying={() => onDiaryModifying(index)}
@@ -479,7 +481,7 @@ class DiaryPlatform extends React.Component {
             passWord: passWord,
             authentication: true,
           });
-          getDiaryList()
+          getDiaryList(userName)
           .then(res => {
             this.setState({diaryList: res.data});
           });
@@ -569,7 +571,7 @@ class DiaryPlatform extends React.Component {
       .then(res => {
         this.setState({authentication: res.data.auth});
         if(res.data.auth) {
-          getDiaryList()
+          getDiaryList(userName)
           .then(res => {
             this.setState({diaryList: res.data});
           });
@@ -624,11 +626,11 @@ class DiaryPlatform extends React.Component {
     if(this.state.authentication &&
       this.state.userName !== '' &&
       this.state.passWord !== '') {
-        this.setState(prevState => {
-          let list = prevState.diaryList;
-          list.splice(index, 1);
-          return { diaryList: list };
-        });
+        let id = this.state.diaryList[index]._id,
+          name = this.state.userName;
+        diaryDelete(id)
+        .then(getDiaryList(name)
+          .then(res => this.setState({diaryList: res.data})));
     } else {
       this.setState({loginShow: true, authentication: false});
     }
@@ -636,32 +638,35 @@ class DiaryPlatform extends React.Component {
 
   handleDiarySubmit(index) {
     if (typeof index !== 'undefined') {
-      this.setState(prevState => {
-        let list = prevState.diaryList;
-        list[index].text = prevState.diaryText;
-        return {
-          diaryList: list,
-          diaryDate: '',
-          diaryText: '',
-          modifiedShow: false
-        };
-      });
+      let id = this.state.diaryList[index]._id,
+        text = this.state.diaryText,
+        name = this.state.userName;
+      diaryModify(id, text)
+      .then(() => {
+        getDiaryList(name)
+        .then(res => this.setState({diaryList: res.data}));})
+      .then(
+        this.setState(prevState => {
+          let list = prevState.diaryList;
+          list[index].text = text;
+          return {
+            diaryList: list,
+            diaryDate: '',
+            diaryText: '',
+            modifiedShow: false};
+        })
+      );
     } else {
-      this.setState(prevState => {
-        let list = prevState.diaryList;
-        let diary = {
-          index: list.length,
-          name: prevState.userName,
-          date: prevState.diaryDate,
-          text: prevState.diaryText
-        };
-        list.unshift(diary);
-        return {
-          diaryList: list,
+      let name = this.state.userName,
+          date = this.state.diaryDate,
+          text = this.state.diaryText;
+      diaryCreate(name, date, text)
+      .then(getDiaryList(name)
+        .then(res => this.setState({diaryList: res.data})));
+      this.setState({
           diaryDate: '',
           diaryText: '',
           modalShow: false
-        };
       });
     }
   }
