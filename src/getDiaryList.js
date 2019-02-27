@@ -1,6 +1,12 @@
 /* eslint-disable no-console */
 import axios from 'axios';
 
-export default function getDiaryList(name) {
-  return axios.post('/api/diaryList', {name: name})
+export default async function getDiaryList(name) {
+  let auth_token = window.localStorage.getItem('authToken');
+  return await axios({
+    method: 'post',
+    url: '/api/diaryList',
+    data: {name: name},
+    headers: {'Authorization': 'Bearer ' + auth_token}
+});
 }

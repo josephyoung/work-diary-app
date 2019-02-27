@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const userAuthentication = (username, password) => {
   if(username !== '' && password !== '') {
-    return axios.post('/api/users/authenticate', {
+    return axios.post('/users/authenticate', {
       username: username,
       password: password
     });

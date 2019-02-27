@@ -1,5 +1,11 @@
 import axios from 'axios';
 
-export default function diaryModify(id, text) {
-  return axios.post('/api/diary_modify', {id: id, text: text});
+export default async function diaryModify(id, text) {
+  let auth_token = window.localStorage.getItem('authToken');
+  return await axios({
+    method: 'post',
+    url: '/api/diary_modify',
+    data: {id: id, text: text},
+    headers: {'Authorization': 'Bearer ' + auth_token}
+  });
 }

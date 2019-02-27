@@ -475,13 +475,14 @@ class DiaryPlatform extends React.Component {
     if(userName !== null && passWord !== null) {
       userAuthentication(userName, passWord)
       .then(res => {
-        if(res.data.auth) {
+        if(res.status === 200) {
+          myStorage.setItem('authToken', res.data.token);
           this.setState({
             userName: userName,
             passWord: passWord,
             authentication: true,
           });
-          getDiaryList(userName)
+          getDiaryList(userName, res.data.token)
           .then(res => {
             this.setState({diaryList: res.data});
           });
@@ -569,8 +570,9 @@ class DiaryPlatform extends React.Component {
     if(userName !== '' && passWord !== '') {
       userAuthentication(userName, passWord)
       .then(res => {
-        this.setState({authentication: res.data.auth});
-        if(res.data.auth) {
+        if(res.status === 200) {
+          window.localStorage.setItem('authToken', res.data.token);
+          this.setState({authentication: true});
           getDiaryList(userName)
           .then(res => {
             this.setState({diaryList: res.data});
@@ -661,12 +663,15 @@ class DiaryPlatform extends React.Component {
           date = this.state.diaryDate,
           text = this.state.diaryText;
       diaryCreate(name, date, text)
-      .then(getDiaryList(name)
-        .then(res => this.setState({diaryList: res.data})));
-      this.setState({
-          diaryDate: '',
-          diaryText: '',
-          modalShow: false
+      .then(() => {
+        getDiaryList(name)
+        .then(res =>
+          this.setState({
+            diaryList: res.data,
+            diaryDate: '',
+            diaryText: '',
+            modalShow: false
+          }));
       });
     }
   }
