@@ -88,7 +88,6 @@ function EditDairy(props) {
           rows="10"
           value={diary_text}
           onChange={e => onTextChange(e.target.value)}
-          required
         />
       </Modal.Body>
       <Modal.Footer>
@@ -768,36 +767,44 @@ class DiaryPlatform extends React.Component {
       let id = this.state.diaryList[index]._id,
         text = this.state.diaryText,
         name = this.state.userName;
-      diaryModify(id, text)
-      .then(() => {
-        getDiaryList(name)
-        .then(res => this.setState({diaryList: res.data}));})
-      .then(
-        this.setState(prevState => {
-          let list = prevState.diaryList;
-          list[index].text = text;
-          return {
-            diaryList: list,
-            diaryDate: '',
-            diaryText: '',
-            modifiedShow: false};
-        })
-      );
+      if(!name || !text) {
+        alert('不允许提交空日志！')
+      } else {
+        diaryModify(id, text)
+        .then(() => {
+          getDiaryList(name)
+          .then(res => this.setState({diaryList: res.data}));})
+        .then(
+          this.setState(prevState => {
+            let list = prevState.diaryList;
+            list[index].text = text;
+            return {
+              diaryList: list,
+              diaryDate: '',
+              diaryText: '',
+              modifiedShow: false};
+          })
+        );
+      }
     } else {
       let name = this.state.userName,
           date = this.state.diaryDate,
           text = this.state.diaryText;
-      diaryCreate(name, date, text)
-      .then(() => {
-        getDiaryList(name)
-        .then(res =>
-          this.setState({
-            diaryList: res.data,
-            diaryDate: '',
-            diaryText: '',
-            modalShow: false
-          }));
-      });
+      if(!name || !date || !text) {
+        alert('不允许提交空日志！')
+      } else {
+        diaryCreate(name, date, text)
+        .then(() => {
+          getDiaryList(name)
+          .then(res =>
+            this.setState({
+              diaryList: res.data,
+              diaryDate: '',
+              diaryText: '',
+              modalShow: false
+            }));
+        });
+      }
     }
   }
   
