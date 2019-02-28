@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable no-console */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-unused-state */
@@ -506,7 +507,7 @@ class Person extends React.Component {
 
 function DiaryCardList(props) {
   const { diaryList, onDiaryModifying, onDiaryDelete, searchPattern } = props;
-  const dateToday = new Date().toJSON().slice(0, 10);
+  const dateToday = date_today();
   let d2 = Date.parse(dateToday);
   let diaryCardList = diaryList.map((diary, index) => {
     let d1 = Date.parse(diary.date);
@@ -789,16 +790,11 @@ class DiaryPlatform extends React.Component {
     if(this.state.authentication &&
       this.state.userName !== '' &&
       this.state.passWord !== '') {
-      if (this.state.diaryDate === '') {
+        const dateToday = date_today();
         this.setState({
           modalShow: true,
-          diaryDate: new Date().toJSON().slice(0, 10)
+          diaryDate: dateToday
         });
-      } else {
-        this.setState({
-          modalShow: true
-        });
-      }
     } else {
       this.setState({loginShow: true, authentication: false});
     }
@@ -887,3 +883,17 @@ function App() {
 }
 
 export default App;
+
+function date_today() {
+  const dateToday_list = new Date().toLocaleDateString().split('/');
+  let month = dateToday_list[0],
+    day = dateToday_list[1],
+    year = dateToday_list[2];
+  if(parseInt(month) < 10) {
+    month = '0' + month;
+  }
+  if(parseInt(day) < 10) {
+    day = '0' + day;
+  }
+  return year + '-' + month + '-' + day;
+}
