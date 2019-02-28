@@ -106,11 +106,7 @@ function EditDairy(props) {
 function SearchBar(props) {
 
   const { onChange, searchPattern, onSearchBarClear } = props;
-  // const [searchtext, setSearchtext] = useState('');
 
-  // const handleChange = (e) => {
-  //   setSearchtext(e.target.value);
-  // }
   function InputGroupAppend() {
     if(!searchPattern) {
       return null;
@@ -337,6 +333,26 @@ function DiaryCard(props) {
     searchPattern
   } = props;
 
+  function highlight(line, pattern) {
+    const line_list = line.split(pattern);
+    let line_list_show = [];
+    for(let n = 0; n < line_list.length; n++) {
+      if(n === 0) {
+        line_list_show.push(line_list[n]);
+      } else {
+        line_list_show.push(
+          <span>
+            <span style={{background: '#28a745', color: 'white'}}>
+              {searchPattern}
+            </span>
+            {line_list[n]}
+          </span>
+        )
+      }
+    }
+    return line_list_show;
+  }
+
   let { name, date, text } = diary;
   let card_show = 'd-block';
 
@@ -348,14 +364,10 @@ function DiaryCard(props) {
       if(card_show === 'd-none') {
         card_show = 'd-block';
       }
-      const date_list = date.split(searchPattern);
+      const date_list_show = highlight(date, searchPattern);
       date = (
         <span>
-          {date_list[0]}
-          <span style={{background: 'navy', color: 'white'}}>
-            {searchPattern}
-          </span>
-          {date_list[1]}
+          {date_list_show}
         </span>
       );
     } else {
@@ -370,14 +382,10 @@ function DiaryCard(props) {
       if(card_show === 'd-none') {
         card_show = 'd-block';
       }
-      const name_list = name.split(searchPattern);
+      const name_list_show = highlight(name, searchPattern);
       name = (
         <span>
-          {name_list[0]}
-          <span style={{background: 'navy', color: 'white'}}>
-            {searchPattern}
-          </span>
-          {name_list[1]}
+          {name_list_show}
         </span>
       );
     } else {
@@ -397,13 +405,28 @@ function DiaryCard(props) {
               card_show = 'd-block';
             }
             const line_text_list = line.split(searchPattern);
+            let line_text_list_show = [];
+            for(let n = 0; n < line_text_list.length; n++) {
+              if(n === 0) {
+                line_text_list_show.push(line_text_list[n]);
+              } else {
+                line_text_list_show.push(
+                  <span>
+                    <span style={{background: '#28a745', color: 'white'}}>
+                      {searchPattern}
+                    </span>
+                    {line_text_list[n]}
+                  </span>
+                )
+              }
+            }
+
             return (
               <article>
-                {line_text_list[0]}
-                <span style={{background: 'navy', color: 'white'}}>
-                  {searchPattern}
+                <span>
+                  {line_text_list_show}
                 </span>
-                {line_text_list[1]}
+                <br />
               </article>
             );
           } else {
