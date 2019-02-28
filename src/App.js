@@ -6,7 +6,7 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prefer-stateless-function */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   Button,
@@ -22,11 +22,12 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './bootstrap.min.css';
+import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
-  faSearch,
+  faTimes,
   faUser,
-  faKey
+  faKey,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import userAuthentication from './userAuthentication';
@@ -36,9 +37,9 @@ import diaryModify from './diaryModify';
 import diaryDelete from './diaryDelete';
 
 library.add(
-  faSearch,
+  faTimes,
   faUser,
-  faKey
+  faKey,
 )
 
 
@@ -101,41 +102,52 @@ function EditDairy(props) {
   );
 }
 
-class SearchBar extends React.Component {
-  render() {
-    return (
-      <Form inline style={{maxWidth: '60%'}}>
-        <InputGroup>
-          <FormControl
-            type="text"
-            placeholder="搜索日志"
+function SearchBar(props) {
 
-          />
-          <InputGroup.Append>
-            <Button variant="outline-light">
-              <FontAwesomeIcon
-                icon={['fas', 'search']}
-              />
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      </Form>
-    );
+  const { onChange, searchPattern, onSearchBarClear } = props;
+  // const [searchtext, setSearchtext] = useState('');
+
+  // const handleChange = (e) => {
+  //   setSearchtext(e.target.value);
+  // }
+  function InputGroupAppend() {
+    if(!searchPattern) {
+      return null;
+    } else {
+      return (
+        <InputGroup.Append>
+          <Button 
+            className='btn btn-danger'
+            onClick={onSearchBarClear}
+          >
+            <FontAwesomeIcon
+              icon={faTimes}
+            />
+          </Button>
+        </InputGroup.Append>
+      );
+    }
   }
-}
 
-class NavigateBar extends React.Component {
-  render() {
-    return (
-      <Navbar
-        fixed="top"
-        expand="sm"
-        className="bg-primary justify-content-sm-between"
+  return (
+    <Form
+      inline
+      className='searchBarForm'
+    >
+      <InputGroup
+        id='search-area'
       >
-        {this.props.children}
-      </Navbar>
-    );
-  }
+        <FormControl
+          type="text"
+          placeholder="搜索日志"
+          name='search'
+          value={searchPattern}
+          onChange={e => onChange(e)}
+        />
+        <InputGroupAppend />
+      </InputGroup>
+    </Form>
+  );
 }
 
 class BottomBar extends React.Component {
@@ -315,52 +327,153 @@ class UserInfoForm extends React.Component {
   }
 }
 
-class DiaryCard extends React.Component {
-  render() {
-    const { editable, diary, onDiaryModifying, onDiaryDelete } = this.props;
-    const { name, date, text } = diary;
-    const textList = text.split('\n');
-    const textListhtml = (
+function DiaryCard(props) {
+  const {
+    editable,
+    diary,
+    onDiaryModifying,
+    onDiaryDelete,
+    searchPattern
+  } = props;
+
+  let { name, date, text } = diary;
+  let card_show = 'd-block';
+
+  if(searchPattern) {
+    if(card_show === 'd-block') {
+      card_show = 'd-none';
+    }
+    if(date.includes(searchPattern)) {
+      if(card_show === 'd-none') {
+        card_show = 'd-block';
+      }
+      const date_list = date.split(searchPattern);
+      date = (
+        <span>
+          {date_list[0]}
+          <span style={{background: 'navy', color: 'white'}}>
+            {searchPattern}
+          </span>
+          {date_list[1]}
+        </span>
+      );
+    } else {
+      date = (
+        <span>
+          {date}
+        </span>
+      );
+    }
+
+    if(name.includes(searchPattern)) {
+      if(card_show === 'd-none') {
+        card_show = 'd-block';
+      }
+      const name_list = name.split(searchPattern);
+      name = (
+        <span>
+          {name_list[0]}
+          <span style={{background: 'navy', color: 'white'}}>
+            {searchPattern}
+          </span>
+          {name_list[1]}
+        </span>
+      );
+    } else {
+      name = (
+        <span>
+          {name}
+        </span>
+      );
+    }
+
+    const lineList = text.split('\n');
+    text = (
       <Card.Body>
-        {textList.map((text,index) => (
-          <article key={index}>
-            {text}
-            <br />
-          </article>
-        ))}
+        {lineList.map((line,index) => {
+          if(line.includes(searchPattern)) {
+            if(card_show === 'd-none') {
+              card_show = 'd-block';
+            }
+            const line_text_list = line.split(searchPattern);
+            return (
+              <article>
+                {line_text_list[0]}
+                <span style={{background: 'navy', color: 'white'}}>
+                  {searchPattern}
+                </span>
+                {line_text_list[1]}
+              </article>
+            );
+          } else {
+            return (
+              <article key={index}>
+                {line}
+                <br />
+              </article>
+            );
+          }
+        })}
       </Card.Body>
     );
-    
-    return (
-      <Card>
-        <Card.Header as="h5">
-          {date}
-(
-          {name}
-)
-          <span className="float-right" style={{display: editable}}>
-            <Button
-              variant="danger"
-              size="sm"
-              className="mr-2"
-              onClick={onDiaryDelete}
-            >
-              删除
-            </Button>
-            <Button
-              variant="success"
-              size="sm"
-              className="rounded"
-              onClick={onDiaryModifying}
-            >
-              修改
-            </Button>
-          </span>
-        </Card.Header>
-        {textListhtml}
-      </Card>
+  } else {
+    if(card_show === 'd-none') {
+      card_show = 'd-block';
+    }
+    date = (
+      <span>
+        {date}
+      </span>
+    );
+    name = (
+      <span>
+        {name}
+      </span>
+    );
+    const lineList = text.split('\n');
+    text = (
+      <Card.Body>
+        {lineList.map((line,index) =>
+          (
+            <article key={index}>
+              {line}
+              <br />
+            </article>
+          )
+        )}
+      </Card.Body>
     );
   }
+
+  return (
+    <Card className={card_show}>
+      <Card.Header as="h5">
+        {date}
+(
+        {name}
+)
+        <span className="float-right" style={{display: editable}}>
+          <Button
+            variant="danger"
+            size="sm"
+            className="mr-2"
+            onClick={onDiaryDelete}
+          >
+            删除
+          </Button>
+          <Button
+            variant="success"
+            size="sm"
+            className="rounded"
+            onClick={onDiaryModifying}
+          >
+            修改
+          </Button>
+        </span>
+      </Card.Header>
+      {text}
+    </Card>
+  );
 }
 
 class HomePage extends React.Component {
@@ -392,7 +505,7 @@ class Person extends React.Component {
 }
 
 function DiaryCardList(props) {
-  const { diaryList, onDiaryModifying, onDiaryDelete } = props;
+  const { diaryList, onDiaryModifying, onDiaryDelete, searchPattern } = props;
   const dateToday = new Date().toJSON().slice(0, 10);
   let d2 = Date.parse(dateToday);
   let diaryCardList = diaryList.map((diary, index) => {
@@ -405,6 +518,7 @@ function DiaryCardList(props) {
           diary={diary}
           onDiaryModifying={() => onDiaryModifying(index)}
           onDiaryDelete={() => onDiaryDelete(index)}
+          searchPattern={searchPattern}
         />
       );
     } else {
@@ -415,6 +529,7 @@ function DiaryCardList(props) {
           diary={diary}
           onDiaryModifying={() => onDiaryModifying(index)}
           onDiaryDelete={() => onDiaryDelete(index)}
+          searchPattern={searchPattern}
         />
       );
     }
@@ -438,6 +553,7 @@ class DiaryPlatform extends React.Component {
       diaryList: [],
       modifiedShow: false,
       loginFailAlert: false,
+      searchPattern: ''
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -454,6 +570,8 @@ class DiaryPlatform extends React.Component {
     this.handleDirayModifying = this.handleDirayModifying.bind(this);
     this.handleDiaryDelete = this.handleDiaryDelete.bind(this);
     this.handleDiarySubmit = this.handleDiarySubmit.bind(this);
+    this.onSearchTextChange = this.onSearchTextChange.bind(this);
+    this.handleSearchBarClear = this.handleSearchBarClear.bind(this);
   }
 
   componentDidMount() {
@@ -495,31 +613,14 @@ class DiaryPlatform extends React.Component {
     });
   }
 
-  handleClose() {
-    this.setState({
-      modalShow: false
-    });
-  }
-
-  handleNewDiaryClick() {
-    if(this.state.authentication &&
-      this.state.userName !== '' &&
-      this.state.passWord !== '') {
-      if (this.state.diaryDate === '') {
-        this.setState({
-          modalShow: true,
-          diaryDate: new Date().toJSON().slice(0, 10)
-        });
-      } else {
-        this.setState({
-          modalShow: true
-        });
-      }
-    } else {
-      this.setState({loginShow: true, authentication: false});
-    }
+  onSearchTextChange(e) {
+    this.setState({searchPattern: e.target.value});
   }
   
+  handleSearchBarClear() {
+    this.setState({searchPattern: ''});
+  }
+
   handleUserClick() {
     this.setState({
       loginShow: true
@@ -675,15 +776,52 @@ class DiaryPlatform extends React.Component {
       });
     }
   }
+  
+
+
+  handleClose() {
+    this.setState({
+      modalShow: false
+    });
+  }
+
+  handleNewDiaryClick() {
+    if(this.state.authentication &&
+      this.state.userName !== '' &&
+      this.state.passWord !== '') {
+      if (this.state.diaryDate === '') {
+        this.setState({
+          modalShow: true,
+          diaryDate: new Date().toJSON().slice(0, 10)
+        });
+      } else {
+        this.setState({
+          modalShow: true
+        });
+      }
+    } else {
+      this.setState({loginShow: true, authentication: false});
+    }
+  }
 
   render() {
     return (
       <Container>
         <Navbar sticky="top" style={{height: '3.5em'}} />
-        <NavigateBar>
-          <SearchBar />
-          <NewDiary onClick={this.handleNewDiaryClick} />
-        </NavigateBar>      
+        <Navbar
+          fixed="top"
+          expand="sm"
+          className="bg-primary justify-content-sm-between"
+        >
+          <SearchBar
+            onChange={this.onSearchTextChange}
+            searchPattern={this.state.searchPattern}
+            onSearchBarClear={this.handleSearchBarClear}
+          />
+          <NewDiary
+            onClick={this.handleNewDiaryClick}
+          />
+        </Navbar>      
         <EditDairy
           show={this.state.modalShow}
           onHide={this.handleClose}
@@ -713,6 +851,7 @@ class DiaryPlatform extends React.Component {
           diaryList={this.state.diaryList}
           onDiaryModifying={this.handleDirayModifying}
           onDiaryDelete={this.handleDiaryDelete}
+          searchPattern={this.state.searchPattern}
         />
 
         <LoginWindow

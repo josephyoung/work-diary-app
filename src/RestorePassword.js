@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { Navbar, Card, Form, InputGroup, Alert, Row, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
