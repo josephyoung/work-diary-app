@@ -86,6 +86,7 @@ function EditDairy(props) {
           rows="10"
           value={diary_text}
           onChange={e => onTextChange(e.target.value)}
+          required
         />
       </Modal.Body>
       <Modal.Footer>
@@ -154,98 +155,82 @@ class BottomBar extends React.Component {
   }
 }
 
-class UserLoginForm extends React.Component {
-  constructor(props) {
-    super(props);
+function UserLoginForm(props) {
+  const {
+    onHide,
+    userLoginFormDisplay,
+    onLoginSubmit,
+    userName,
+    passWord,
+    onUserNameChange,
+    onPassWordChange,
+    loginFailAlert
+  } = props;
 
-    this.state = {
-      alertShow: false,
-    }
-  }
+  return (
+    <div style={{ display: userLoginFormDisplay }}>
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
+      </Modal.Header>
+      <Form style={{ width: '60%', margin: 'auto' }}>
+        <Form.Group as={Row} controlId="form-control-plaintext">
+          <Form.Label column sm={3} />
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text>
+                <FontAwesomeIcon
+                  icon={['fas', 'user']}
+                  fixedWidth
+                />
+              </InputGroup.Text>
+            </InputGroup.Prepend>            
+            <Form.Control
+              type="text"
+              placeholder="请输入用户名"
+              required
+              value={userName}
+              onChange={e => onUserNameChange(e.target.value)}
+            />
+          </InputGroup>
+        </Form.Group>
 
-   handleSubmit = () => {
-    const { onLoginSubmit, authentication } = this.props;
-    onLoginSubmit();
-    if(!authentication) {
-      this.setState({alertShow: true});
-    }
-  }
-
-  render() {
-    const {
-      onHide,
-      userLoginFormDisplay,
-      userName,
-      passWord,
-      onUserNameChange,
-      onPassWordChange,
-    } = this.props;
-
-    return (
-      <div style={{ display: userLoginFormDisplay }}>
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
-        </Modal.Header>
-        <Form style={{ width: '60%', margin: 'auto' }}>
-          <Form.Group as={Row} controlId="form-control-plaintext">
-            <Form.Label column sm={3} />
-            <InputGroup>
-              <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <FontAwesomeIcon
-                    icon={['fas', 'user']}
-                    fixedWidth
-                  />
-                </InputGroup.Text>
-              </InputGroup.Prepend>            
-              <Form.Control
-                type="text"
-                placeholder="请输入用户名"
-                required
-                value={userName}
-                onChange={e => onUserNameChange(e.target.value)}
-              />
-            </InputGroup>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="form-control-plaintext">
-            <Form.Label column sm={3} />
-            <InputGroup>
-              <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <FontAwesomeIcon
-                    icon={['fas','key']}
-                    fixedWidth
-                  />
-                </InputGroup.Text>
-              </InputGroup.Prepend> 
-              <Form.Control
-                type="password"
-                placeholder="请输入密码"
-                required
-                value={passWord}
-                onChange={e => onPassWordChange(e.target.value)}
-              />
-            </InputGroup>
-          </Form.Group>
-          <Alert variant='danger' show={this.state.alertShow}>用户名或密码错误！</Alert>
-          <Form.Group controlId="formBasicLink" className="text-center">
-            <Link to="/signup">注册</Link>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Link to="/restore_password">忘记密码</Link>
-          </Form.Group>
-        </Form>
-        <Modal.Footer>
-          <Button variant="danger" onClick={onHide}>
-            取消
-          </Button>
-          <Button variant="success" type="submit" onClick={this.handleSubmit}>
-            登录
-          </Button>
-        </Modal.Footer>
-      </div>
-    );
-  }
+        <Form.Group as={Row} controlId="form-control-plaintext">
+          <Form.Label column sm={3} />
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text>
+                <FontAwesomeIcon
+                  icon={['fas','key']}
+                  fixedWidth
+                />
+              </InputGroup.Text>
+            </InputGroup.Prepend> 
+            <Form.Control
+              type="password"
+              placeholder="请输入密码"
+              required
+              value={passWord}
+              onChange={e => onPassWordChange(e.target.value)}
+            />
+          </InputGroup>
+        </Form.Group>
+        <Alert variant='danger' show={loginFailAlert} onClose>用户名或密码错误！</Alert>
+        <Form.Group controlId="formBasicLink" className="text-center">
+          <Link to="/signup">注册</Link>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <Link to="/restore_password">忘记密码</Link>
+        </Form.Group>
+      </Form>
+      <Modal.Footer>
+        <Button variant="danger" onClick={onHide}>
+          取消
+        </Button>
+        <Button variant="success" type="submit" onClick={onLoginSubmit}>
+          登录
+        </Button>
+      </Modal.Footer>
+    </div>
+  );
 }
 
 class LoginWindow extends React.Component {
@@ -259,7 +244,8 @@ class LoginWindow extends React.Component {
       onUserNameChange,
       onPassWordChange,
       authentication,
-      onLogout
+      onLogout,
+      loginFailAlert
     } = this.props;
 
     let userLoginFormDisplay, userInfoFormDisplay;
@@ -289,6 +275,7 @@ class LoginWindow extends React.Component {
           passWord={passWord}
           onUserNameChange={onUserNameChange}
           onPassWordChange={onPassWordChange}
+          loginFailAlert={loginFailAlert}
         />
         <UserInfoForm
           onHide={onHide}
@@ -449,7 +436,8 @@ class DiaryPlatform extends React.Component {
       passWord: '',
       authentication: false,
       diaryList: [],
-      modifiedShow: false
+      modifiedShow: false,
+      loginFailAlert: false,
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -556,12 +544,18 @@ class DiaryPlatform extends React.Component {
     this.setState({
       userName: userName
     });
+    if(this.state.loginFailAlert) {
+      this.setState({loginFailAlert: false})
+    }
   }
 
   handlePassWordChange(passWord) {
     this.setState({
       passWord: passWord
     });
+    if(this.state.loginFailAlert) {
+      this.setState({loginFailAlert: false})
+    }
   }
 
   handleLoginSubmit() {
@@ -579,6 +573,12 @@ class DiaryPlatform extends React.Component {
           });
           localStorage.setItem('userName', userName);
           localStorage.setItem('passWord', passWord);
+        }
+      }).catch(err => {
+        if(err.response.status === 400) {
+          this.setState({loginFailAlert: true});
+        } else {
+          alert(err.response.data.message);
         }
       });
     }
@@ -725,6 +725,7 @@ class DiaryPlatform extends React.Component {
           passWord={this.state.passWord}
           authentication={this.state.authentication}
           onLogout={this.handleLogout}
+          loginFailAlert={this.state.loginFailAlert}
         />
         <Navbar sticky="bottom" style={{height: '3.5em'}} />
         <BottomBar fixed="bottom" style={{ margin: 'auto' }}>
