@@ -17,7 +17,8 @@ const SignUp = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     if(password === repeatPassword) {
-      await axios.post('/users/register', { username, password })
+      await axios.post('/users/register',
+        { username, password, question, answer })
         .then(() => setSuccess(true))
         .catch(err => {
           if(err.response.status === 400) {
@@ -65,7 +66,7 @@ const SignUp = () => {
   return (
     <div>
       <Navbar
-        className='bg-primary justify-content-between'
+        className='bg-success justify-content-between'
       >
         <Link 
           className='btn btn-outline-light' 
@@ -183,7 +184,7 @@ const SignUp = () => {
               </InputGroup>
             </Form.Group>
             <Button 
-              variant='primary' 
+              variant='success' 
               type='submit' 
               style={{width: '100%'}}
             >
@@ -198,7 +199,7 @@ const SignUp = () => {
             注册成功！
           </Card.Text>
           <Link
-            className='btn btn-primary'
+            className='btn btn-success'
             style={{width: '100%'}}
             to='/'
           >

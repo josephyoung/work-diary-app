@@ -31,7 +31,7 @@ const RestorePassword = () => {
   return (
     <div>
       <Navbar
-        className='bg-primary justify-content-between'
+        className='bg-success justify-content-between'
       >
         <Link className='btn btn-outline-light' to='/'>
           返回
@@ -103,7 +103,7 @@ const RestorePassword = () => {
               </InputGroup>
             </Form.Group>
             <Button 
-              variant='primary' 
+              variant='success' 
               type='submit' 
               style={{width: '100%'}}
             >
@@ -118,7 +118,7 @@ const RestorePassword = () => {
             注册成功！
           </Card.Text>
           <Link
-            className='btn btn-primary'
+            className='btn btn-success'
             style={{width: '100%'}}
             to='/'
           >

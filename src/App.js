@@ -49,7 +49,7 @@ class NewDiary extends React.Component {
   render() {
     const { onClick } = this.props;
     return (
-      <Button variant="success" onClick={onClick}>
+      <Button variant="primary" onClick={onClick}>
         新建日志
       </Button>
     );
@@ -113,7 +113,7 @@ function SearchBar(props) {
       return (
         <InputGroup.Append>
           <Button 
-            className='btn btn-danger'
+            // className='btn btn-danger'
             onClick={onSearchBarClear}
           >
             <FontAwesomeIcon
@@ -165,7 +165,6 @@ class BottomBar extends React.Component {
 
 function UserLoginForm(props) {
   const {
-    onHide,
     userLoginFormDisplay,
     onLoginSubmit,
     userName,
@@ -177,7 +176,7 @@ function UserLoginForm(props) {
 
   return (
     <div style={{ display: userLoginFormDisplay }}>
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
       </Modal.Header>
       <Form style={{ width: '60%', margin: 'auto' }}>
@@ -228,15 +227,20 @@ function UserLoginForm(props) {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Link to="/restore_password">忘记密码</Link>
         </Form.Group>
+
       </Form>
-      <Modal.Footer>
-        <Button variant="danger" onClick={onHide}>
-          取消
-        </Button>
-        <Button variant="success" type="submit" onClick={onLoginSubmit}>
+      <div
+        style={{ width: '70%', margin: '0 auto 1em'}}
+      >
+        <Button
+          variant="success"
+          type="submit"
+          onClick={onLoginSubmit}
+          style={{ width: '100%' }}
+        >
           登录
         </Button>
-      </Modal.Footer>
+      </div>
     </div>
   );
 }
@@ -693,7 +697,9 @@ class DiaryPlatform extends React.Component {
           this.setState({authentication: true});
           getDiaryList(userName)
           .then(res => {
-            this.setState({diaryList: res.data});
+            this.setState({
+              diaryList: res.data
+            });
           });
           localStorage.setItem('userName', userName);
           localStorage.setItem('passWord', passWord);
@@ -775,14 +781,10 @@ class DiaryPlatform extends React.Component {
           getDiaryList(name)
           .then(res => this.setState({diaryList: res.data}));})
         .then(
-          this.setState(prevState => {
-            let list = prevState.diaryList;
-            list[index].text = text;
-            return {
-              diaryList: list,
-              diaryDate: '',
-              diaryText: '',
-              modifiedShow: false};
+          this.setState({
+            diaryDate: '',
+            diaryText: '',
+            modifiedShow: false
           })
         );
       }
@@ -837,7 +839,7 @@ class DiaryPlatform extends React.Component {
         <Navbar
           fixed="top"
           expand="sm"
-          className="bg-primary justify-content-sm-between"
+          className="bg-success justify-content-sm-between"
         >
           <SearchBar
             onChange={this.onSearchTextChange}
