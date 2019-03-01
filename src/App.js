@@ -874,6 +874,7 @@ class DiaryPlatform extends React.Component {
           onTextChange={this.onTextChange}
           onDiarySubmit={this.handleDiarySubmit}
           index={this.modifiedIndex}
+          dateReadOnly
         />
         <DiaryCardList
           diaryList={this.state.diaryList}
@@ -917,15 +918,15 @@ function App() {
 export default App;
 
 function date_today() {
-  const dateToday_list = new Date().toLocaleDateString().split('/');
-  let month = dateToday_list[0],
-    day = dateToday_list[1],
-    year = dateToday_list[2];
+  const date =  new Date();
+  const year = date.getFullYear();
+  let month = String(parseInt(date.getMonth()) + 1);
+  let day = date.getDate();
   if(parseInt(month) < 10) {
-    month = '0' + month;
+    month = `0${month}`;
   }
   if(parseInt(day) < 10) {
-    day = '0' + day;
+    day = `0${day}`;
   }
   return year + '-' + month + '-' + day;
 }
