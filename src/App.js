@@ -70,7 +70,11 @@ function EditDairy(props) {
   } = props;
 
   return (
-    <Modal show={show} onHide={onHide} backdrop="static">
+    <Modal
+      show={show}
+      onHide={onHide}
+      backdrop="static"
+    >
       <Modal.Header>
         <Modal.Title id="contained-modal-titl-vcenter">
           <FormControl
@@ -94,7 +98,10 @@ function EditDairy(props) {
         <Button variant="danger" onClick={onHide}>
           取消
         </Button>
-        <Button variant="success" onClick={() => onDiarySubmit(index)}>
+        <Button
+          variant="success"
+          onClick={() => onDiarySubmit(index)}
+        >
           提交
         </Button>
       </Modal.Footer>
@@ -171,7 +178,8 @@ function UserLoginForm(props) {
     passWord,
     onUserNameChange,
     onPassWordChange,
-    loginFailAlert
+    loginFailAlert,
+    onLoginKeyPress
   } = props;
 
   return (
@@ -179,7 +187,10 @@ function UserLoginForm(props) {
       <Modal.Header>
         <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
       </Modal.Header>
-      <Form style={{ width: '60%', margin: 'auto' }}>
+      <Form
+        style={{ width: '60%', margin: 'auto' }}
+        onKeyPress={onLoginKeyPress}
+      >
         <Form.Group as={Row} controlId="form-control-plaintext">
           <Form.Label column sm={3} />
           <InputGroup>
@@ -257,7 +268,8 @@ class LoginWindow extends React.Component {
       onPassWordChange,
       authentication,
       onLogout,
-      loginFailAlert
+      loginFailAlert,
+      onLoginKeyPress
     } = this.props;
 
     let userLoginFormDisplay, userInfoFormDisplay;
@@ -288,6 +300,7 @@ class LoginWindow extends React.Component {
           onUserNameChange={onUserNameChange}
           onPassWordChange={onPassWordChange}
           loginFailAlert={loginFailAlert}
+          onLoginKeyPress={onLoginKeyPress}
         />
         <UserInfoForm
           onHide={onHide}
@@ -599,6 +612,7 @@ class DiaryPlatform extends React.Component {
     this.handleDiarySubmit = this.handleDiarySubmit.bind(this);
     this.onSearchTextChange = this.onSearchTextChange.bind(this);
     this.handleSearchBarClear = this.handleSearchBarClear.bind(this);
+    this.handleLoginKeyPress = this.handleLoginKeyPress.bind(this);
   }
 
   componentDidMount() {
@@ -809,8 +823,12 @@ class DiaryPlatform extends React.Component {
       }
     }
   }
-  
 
+  handleLoginKeyPress(e) {
+    if(e.key === 'Enter') {
+      this.handleLoginSubmit();
+    }
+  }
 
   handleClose() {
     this.setState({
@@ -894,6 +912,7 @@ class DiaryPlatform extends React.Component {
           authentication={this.state.authentication}
           onLogout={this.handleLogout}
           loginFailAlert={this.state.loginFailAlert}
+          onLoginKeyPress={this.handleLoginKeyPress}
         />
         <Navbar sticky="bottom" style={{height: '3.5em'}} />
         <BottomBar fixed="bottom" style={{ margin: 'auto' }}>
