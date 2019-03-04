@@ -31,12 +31,6 @@ const SignUp = () => {
       setPwCheckFail(true);
     }
   }
-
-  async function handleKeyPress(e) {
-    if(e.key === 'Enter') {
-    await handleSubmit(e);
-    }
-  }
   
   const handleChange = (e) => {
     const { target: { name, value }} = e;
@@ -73,6 +67,7 @@ const SignUp = () => {
     <div>
       <Navbar
         className='bg-success justify-content-between'
+        fixed='top'
       >
         <Link 
           className='btn btn-outline-light' 
@@ -87,7 +82,6 @@ const SignUp = () => {
           <Form
             style={{ width: '80%', margin: 'auto' }}
             onSubmit={handleSubmit}
-            onKeyPress={handleKeyPress}
           >
             <Form.Group
               as={Row}

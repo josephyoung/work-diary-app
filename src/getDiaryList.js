@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios from 'axios';
 
 export default async function getDiaryList(name) {
@@ -7,6 +6,8 @@ export default async function getDiaryList(name) {
     method: 'post',
     url: '/api/diaryList',
     data: {name: name},
-    headers: {'Authorization': 'Bearer ' + auth_token}
+    headers: {
+      'Authorization': 'Bearer ' + auth_token,
+     }
 });
 }

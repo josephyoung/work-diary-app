@@ -1,13 +1,6 @@
-/* eslint-disable quotes */
-/* eslint-disable no-console */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/jsx-no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prefer-stateless-function */
-import React, { useState } from 'react';
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import React from 'react';
 import {
   Alert,
   Button,
@@ -31,6 +24,7 @@ import {
   faKey,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { v1 } from 'uuid'
 import userAuthentication from './userAuthentication';
 import getDiaryList from './getDiaryList';
 import diaryCreate from './diaryCreate';
@@ -43,17 +37,16 @@ library.add(
   faKey,
 )
 
-
-
-class NewDiary extends React.Component {
-  render() {
-    const { onClick } = this.props;
-    return (
-      <Button variant="primary" onClick={onClick}>
-        新建日志
-      </Button>
-    );
-  }
+function NewDiary(props) {
+  const { onClick } = props;
+  return (
+    <Button
+      variant='outline-light'
+      onClick={onClick}
+    >
+      新建日志
+    </Button>
+  );
 }
 
 function EditDairy(props) {
@@ -119,8 +112,8 @@ function SearchBar(props) {
     } else {
       return (
         <InputGroup.Append>
-          <Button 
-            // className='btn btn-danger'
+          <Button
+            variant='outline-light'
             onClick={onSearchBarClear}
           >
             <FontAwesomeIcon
@@ -153,22 +146,21 @@ function SearchBar(props) {
   );
 }
 
-class BottomBar extends React.Component {
-  render() {
-    const { sticky, fixed, style } = this.props;
-    return (
-      <Navbar
-        sticky={sticky}
-        fixed={fixed}
-        style={style}
-        expand="lg"
-        className="bg-light justify-content-between"
-      >
-        {this.props.children}
-      </Navbar>
-    );
-  }
+function BottomBar(props) {
+  const { sticky, fixed, style } = props;
+  return (
+    <Navbar
+      sticky={sticky}
+      fixed={fixed}
+      style={style}
+      expand="lg"
+      className="justify-content-between"
+    >
+      {props.children}
+    </Navbar>
+  );
 }
+
 
 function UserLoginForm(props) {
   const {
@@ -185,7 +177,11 @@ function UserLoginForm(props) {
   return (
     <div style={{ display: userLoginFormDisplay }}>
       <Modal.Header>
-        <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
+        <Modal.Title
+          id="contained-modal-titl-vcenter"
+        >
+          研发中心新业务部日志系统
+        </Modal.Title>
       </Modal.Header>
       <Form
         style={{ width: '60%', margin: 'auto' }}
@@ -232,11 +228,28 @@ function UserLoginForm(props) {
             />
           </InputGroup>
         </Form.Group>
-        <Alert variant='danger' show={loginFailAlert} onClose>用户名或密码错误！</Alert>
-        <Form.Group controlId="formBasicLink" className="text-center">
-          <Link to="/signup">注册</Link>
+        <Alert
+          variant='danger'
+          show={loginFailAlert}
+          onClose
+        >
+          用户名或密码错误！
+        </Alert>
+        <Form.Group
+          controlId="formBasicLink"
+          className="text-center"
+        >
+          <Link
+            to="/signup"
+          >
+            注册
+          </Link>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Link to="/restore_password">忘记密码</Link>
+          <Link
+            to="/restore_password"
+          >
+            忘记密码
+          </Link>
         </Form.Group>
 
       </Form>
@@ -256,88 +269,112 @@ function UserLoginForm(props) {
   );
 }
 
-class LoginWindow extends React.Component {
-  render() {
-    const {
-      loginShow,
-      onHide,
-      onLoginSubmit,
-      userName,
-      passWord,
-      onUserNameChange,
-      onPassWordChange,
-      authentication,
-      onLogout,
-      loginFailAlert,
-      onLoginKeyPress
-    } = this.props;
+function LoginWindow(props) {
+  const {
+    loginShow,
+    onHide,
+    onLoginSubmit,
+    userName,
+    passWord,
+    onUserNameChange,
+    onPassWordChange,
+    authentication,
+    onLogout,
+    loginFailAlert,
+    onLoginKeyPress,
+    isAutoHide
+  } = props;
 
-    let userLoginFormDisplay, userInfoFormDisplay;
+  let userLoginFormDisplay, userInfoFormDisplay;
 
-    if (!authentication) {
-      userLoginFormDisplay = 'block';
-      userInfoFormDisplay = 'none';
-    } else {
-      userLoginFormDisplay = 'none';
-      userInfoFormDisplay = 'block';
-    }
-
-    return (
-      <Modal
-        show={loginShow}
-        onHide={onHide}
-        size="lg"
-        dialogClassName="modal-90w"
-        backdrop="static"
-        centered="true"
-      >
-        <UserLoginForm
-          onHide={onHide}
-          onLoginSubmit={onLoginSubmit}
-          userLoginFormDisplay={userLoginFormDisplay}
-          userName={userName}
-          passWord={passWord}
-          onUserNameChange={onUserNameChange}
-          onPassWordChange={onPassWordChange}
-          loginFailAlert={loginFailAlert}
-          onLoginKeyPress={onLoginKeyPress}
-        />
-        <UserInfoForm
-          onHide={onHide}
-          userInfoFormDisplay={userInfoFormDisplay}
-          userName={userName}
-          onLogout={onLogout}
-        />
-      </Modal>
-    );
+  if (!authentication) {
+    userLoginFormDisplay = 'block';
+    userInfoFormDisplay = 'none';
+  } else {
+    userLoginFormDisplay = 'none';
+    userInfoFormDisplay = 'block';
   }
+
+  return (
+    <Modal
+      show={loginShow}
+      onHide={onHide}
+      size="lg"
+      dialogClassName="modal-90w"
+      backdrop="static"
+      centered="true"
+    >
+      <UserLoginForm
+        onHide={onHide}
+        onLoginSubmit={onLoginSubmit}
+        userLoginFormDisplay={userLoginFormDisplay}
+        userName={userName}
+        passWord={passWord}
+        onUserNameChange={onUserNameChange}
+        onPassWordChange={onPassWordChange}
+        loginFailAlert={loginFailAlert}
+        onLoginKeyPress={onLoginKeyPress}
+      />
+      <UserInfoForm
+        onHide={onHide}
+        userInfoFormDisplay={userInfoFormDisplay}
+        userName={userName}
+        onLogout={onLogout}
+        isAutoHide={isAutoHide}
+      />
+    </Modal>
+  );
 }
 
-class UserInfoForm extends React.Component {
-  render() {
-    const { onLogout, onHide, userInfoFormDisplay, userName } = this.props;
-    return (
-      <div style={{ display: userInfoFormDisplay }}>
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            当前登录用户:&nbsp;
+function UserInfoForm(props) {
+  const {
+    onLogout,
+    onHide,
+    userInfoFormDisplay,
+    userName,
+    isAutoHide
+  } = props;
+
+  return (
+    <div>
+      {isAutoHide ? (
+        <div style={{ display: userInfoFormDisplay }}>
+          <Modal.Header closeButton>
+            <Modal.Title 
+              id="contained-modal-titl-vcenter"
+            >
+              登录信息
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            用户
             {userName}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={onLogout}>
-            登出
-          </Button>
-          <Button variant="success" onClick={onHide}>
-            关闭
-          </Button>
-        </Modal.Footer>
-      </div>
-    );
-  }
+            登录成功
+          </Modal.Body>
+        </div>
+      ) : (
+        <div style={{ display: userInfoFormDisplay }}>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-titl-vcenter">登录信息</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              当前登录用户:&nbsp;
+              {userName}
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={onLogout}>
+              登出
+            </Button>
+            <Button variant="success" onClick={onHide}>
+              关闭
+            </Button>
+          </Modal.Footer>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function DiaryCard(props) {
@@ -349,6 +386,7 @@ function DiaryCard(props) {
     searchPattern
   } = props;
 
+
   function highlight(line, pattern) {
     const line_list = line.split(pattern);
     let line_list_show = [];
@@ -357,7 +395,7 @@ function DiaryCard(props) {
         line_list_show.push(line_list[n]);
       } else {
         line_list_show.push(
-          <span>
+          <span key={v1()}>
             <span style={{background: '#28a745', color: 'white'}}>
               {searchPattern}
             </span>
@@ -427,7 +465,7 @@ function DiaryCard(props) {
                 line_text_list_show.push(line_text_list[n]);
               } else {
                 line_text_list_show.push(
-                  <span>
+                  <span key={v1()}>
                     <span style={{background: '#28a745', color: 'white'}}>
                       {searchPattern}
                     </span>
@@ -438,7 +476,7 @@ function DiaryCard(props) {
             }
 
             return (
-              <article>
+              <article key={v1()}>
                 <span>
                   {line_text_list_show}
                 </span>
@@ -447,6 +485,7 @@ function DiaryCard(props) {
             );
           } else {
             return (
+              // eslint-disable-next-line react/no-array-index-key
               <article key={index}>
                 {line}
                 <br />
@@ -475,6 +514,7 @@ function DiaryCard(props) {
       <Card.Body>
         {lineList.map((line,index) =>
           (
+            // eslint-disable-next-line react/no-array-index-key
             <article key={index}>
               {line}
               <br />
@@ -486,8 +526,13 @@ function DiaryCard(props) {
   }
 
   return (
-    <Card className={card_show}>
-      <Card.Header as="h5">
+    <Card
+      className={card_show}
+    >
+      <Card.Header
+        as="h5"
+        className='bg-light'
+      >
         {date}
 (
         {name}
@@ -516,41 +561,45 @@ function DiaryCard(props) {
   );
 }
 
-class HomePage extends React.Component {
-  render() {
-    const onClick = this.props.onClick;
-    let img_src;
-    img_src = !this.props.loginShow ? '/home_active.svg' : '/home.svg';
-    return (
-      <img src={img_src} alt="HOME" title="首页" width="40" onClick={onClick} />
-    );
-  }
+function HomePage(props) {
+  const onClick = props.onClick;
+  let img_src;
+  img_src = !props.loginShow ? '/home_active.svg' : '/home.svg';
+  return (
+    <img src={img_src} alt="HOME" title="首页" width="40" onClick={onClick} />
+  );
 }
 
-class Person extends React.Component {
-  render() {
-    const onClick = this.props.onClick;
-    let img_src;
-    img_src = this.props.loginShow ? '/user_active.svg' : '/user.svg';
-    return (
-      <img
-        src={img_src}
-        alt="PROFILE"
-        title="我的"
-        width="40"
-        onClick={onClick}
-      />
-    );
-  }
+function Person(props) {
+  const onClick = props.onClick;
+  let img_src;
+  img_src = props.loginShow ? '/user_active.svg' : '/user.svg';
+  return (
+    <img
+      src={img_src}
+      alt="PROFILE"
+      title="我的"
+      width="40"
+      onClick={onClick}
+    />
+  );
 }
 
 function DiaryCardList(props) {
-  const { diaryList, onDiaryModifying, onDiaryDelete, searchPattern } = props;
+  const {
+    diaryList, 
+    onDiaryModifying, 
+    onDiaryDelete, 
+    searchPattern,
+    userName
+  } = props;
+
   const dateToday = date_today();
   let d2 = Date.parse(dateToday);
   let diaryCardList = diaryList.map((diary, index) => {
     let d1 = Date.parse(diary.date);
-    if (d1 >= d2 || index === 0) {
+    let name = diary.name;
+    if ((d1 >= d2 || index === 0) && userName === name) {
       return (
         <DiaryCard
           key={diary._id}
@@ -634,7 +683,8 @@ class DiaryPlatform extends React.Component {
             this.setState({diaryList: res.data});
           });
         }
-      });
+      })
+      .catch(() => this.setState({loginShow: true}));
     } else {
       this.setState({
         loginShow: true,
@@ -700,7 +750,7 @@ class DiaryPlatform extends React.Component {
     }
   }
 
-  handleLoginSubmit() {
+  async handleLoginSubmit() {
     const userName = this.state.userName;
     const passWord = this.state.passWord;
     if(userName !== '' && passWord !== '') {
@@ -717,6 +767,9 @@ class DiaryPlatform extends React.Component {
           });
           localStorage.setItem('userName', userName);
           localStorage.setItem('passWord', passWord);
+          setTimeout(() => {
+            this.setState({loginShow: false});
+          }, 700);
         }
       }).catch(err => {
         if(err.response.status === 400) {
@@ -775,8 +828,8 @@ class DiaryPlatform extends React.Component {
         let id = this.state.diaryList[index]._id,
           name = this.state.userName;
         diaryDelete(id)
-        .then(getDiaryList(name)
-          .then(res => this.setState({diaryList: res.data})));
+        .then(() => { getDiaryList(name)
+          .then(res => this.setState({diaryList: res.data}))});
     } else {
       this.setState({loginShow: true, authentication: false});
     }
@@ -790,7 +843,7 @@ class DiaryPlatform extends React.Component {
       if(!name || !text) {
         alert('不允许提交空日志！')
       } else {
-        diaryModify(id, text)
+        diaryModify(id, name, text)
         .then(() => {
           getDiaryList(name)
           .then(res => this.setState({diaryList: res.data}));})
@@ -852,12 +905,14 @@ class DiaryPlatform extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container
+        fluid
+      >
         <Navbar sticky="top" style={{height: '3.5em'}} />
         <Navbar
           fixed="top"
           expand="sm"
-          className="bg-success justify-content-sm-between"
+          className="justify-content-sm-between bg-success"
         >
           <SearchBar
             onChange={this.onSearchTextChange}
@@ -899,6 +954,7 @@ class DiaryPlatform extends React.Component {
           onDiaryModifying={this.handleDirayModifying}
           onDiaryDelete={this.handleDiaryDelete}
           searchPattern={this.state.searchPattern}
+          userName={this.state.userName}
         />
 
         <LoginWindow
@@ -915,7 +971,10 @@ class DiaryPlatform extends React.Component {
           onLoginKeyPress={this.handleLoginKeyPress}
         />
         <Navbar sticky="bottom" style={{height: '3.5em'}} />
-        <BottomBar fixed="bottom" style={{ margin: 'auto' }}>
+        <BottomBar 
+          fixed="bottom" 
+          style={{ margin: 'auto', backgroundColor: '#eee'}}
+        >
           <HomePage
             loginShow={this.state.loginShow}
             onClick={this.handleHomeClick}
