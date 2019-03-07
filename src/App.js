@@ -30,6 +30,7 @@ import getDiaryList from './getDiaryList';
 import diaryCreate from './diaryCreate';
 import diaryModify from './diaryModify';
 import diaryDelete from './diaryDelete';
+import SearchBar from './SearchBar';
 
 library.add(
   faTimes,
@@ -42,6 +43,7 @@ function NewDiary(props) {
   return (
     <Button
       variant='outline-light'
+      className='text-nowrap'
       onClick={onClick}
     >
       新建日志
@@ -99,50 +101,6 @@ function EditDairy(props) {
         </Button>
       </Modal.Footer>
     </Modal>
-  );
-}
-
-function SearchBar(props) {
-
-  const { onChange, searchPattern, onSearchBarClear } = props;
-
-  function InputGroupAppend() {
-    if(!searchPattern) {
-      return null;
-    } else {
-      return (
-        <InputGroup.Append>
-          <Button
-            variant='outline-light'
-            onClick={onSearchBarClear}
-          >
-            <FontAwesomeIcon
-              icon={faTimes}
-            />
-          </Button>
-        </InputGroup.Append>
-      );
-    }
-  }
-
-  return (
-    <Form
-      inline
-      className='searchBarForm'
-    >
-      <InputGroup
-        id='search-area'
-      >
-        <FormControl
-          type="text"
-          placeholder="搜索日志"
-          name='search'
-          value={searchPattern}
-          onChange={e => onChange(e)}
-        />
-        <InputGroupAppend />
-      </InputGroup>
-    </Form>
   );
 }
 
@@ -912,7 +870,7 @@ class DiaryPlatform extends React.Component {
         <Navbar
           fixed="top"
           expand="sm"
-          className="justify-content-sm-between bg-success"
+          className="justify-content-sm-between bg-success flex-nowrap"
         >
           <SearchBar
             onChange={this.onSearchTextChange}
